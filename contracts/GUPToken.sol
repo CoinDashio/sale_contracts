@@ -1,7 +1,8 @@
 pragma solidity ^0.4.6;
-import "./StandardToken.sol";
+// import "./StandardToken.sol";
+import 'zeppelin-solidity/contracts/token/VestedToken.sol';
 
-contract GUPToken is StandardToken {
+contract GUPToken is VestedToken {
 
 	//FIELDS
 	//CONSTANTS
@@ -20,12 +21,12 @@ contract GUPToken is StandardToken {
 		_;
 	}
 
-	// Can only be called if illiquid tokens may be transformed into liquid.
-	// This happens when `LOCKOUT_PERIOD` of time passes after `endMintingTime`.
-	modifier when_thawable {
-		if (now < endMintingTime + LOCKOUT_PERIOD) throw;
-		_;
-	}
+	// // Can only be called if illiquid tokens may be transformed into liquid.
+	// // This happens when `LOCKOUT_PERIOD` of time passes after `endMintingTime`.
+	// modifier when_thawable {
+	// 	if (now < endMintingTime + LOCKOUT_PERIOD) throw;
+	// 	_;
+	// }
 
 	// Can only be called if (liquid) tokens may be transferred. Happens
 	// immediately after `endMintingTime`.
@@ -64,43 +65,53 @@ contract GUPToken is StandardToken {
 		return true;
 	}
 
-	// Create an illiquidBalance which cannot be traded until end of lockout period.
-	// Can only be called by crowdfund contract befor the end time.
-	function createIlliquidToken(address _recipient, uint _value)
-		when_mintable
-		only_minter
-		returns (bool o_success)
-	{
-		illiquidBalance[_recipient] += _value;
-		totalSupply += _value;
-		return true;
-	}
+	// // Create an illiquidBalance which cannot be traded until end of lockout period.
+	// // Can only be called by crowdfund contract befor the end time.
+	// function createIlliquidToken(address _recipient, uint _value)
+	// 	when_mintable
+	// 	only_minter
+	// 	returns (bool o_success)
+	// {
+	// 	illiquidBalance[_recipient] += _value;
+	// 	totalSupply += _value;
+	// 	return true;
+	// }
 
-	// Make sender's illiquid balance liquid when called after lockout period.
-	function makeLiquid()
-		when_thawable
-		returns (bool o_success)
-	{
-		balances[msg.sender] += illiquidBalance[msg.sender];
-		illiquidBalance[msg.sender] = 0;
-		return true;
-	}
+	// // Make sender's illiquid balance liquid when called after lockout period.
+	// function makeLiquid()
+	// 	when_thawable
+	// 	returns (bool o_success)
+	// {
+	// 	balances[msg.sender] += illiquidBalance[msg.sender];
+	// 	illiquidBalance[msg.sender] = 0;
+	// 	return true;
+	// }
 
 	// Transfer amount of tokens from sender account to recipient.
 	// Only callable after the crowd fund end date.
-	function transfer(address _recipient, uint _amount)
+	// function transfer(address _recipient, uint _amount)
+	// 	when_transferable
+	// 	returns (bool o_success)
+	// {
+	// 	return super.transfer(_recipient, _amount);
+	// }
+	function transfer(address _to, uint _value) 
 		when_transferable
-		returns (bool o_success)
-	{
-		return super.transfer(_recipient, _amount);
-	}
+		canTransfer(msg.sender, _value) {
+	   return super.transfer(_to, _value);
+	  }
 
 	// Transfer amount of tokens from a specified address to a recipient.
 	// Only callable after the crowd fund end date.
-	function transferFrom(address _from, address _recipient, uint _amount)
-		when_transferable
-		returns (bool o_success)
-	{
-		return super.transferFrom(_from, _recipient, _amount);
-	}
+	// function transferFrom(address _from, address _recipient, uint _amount)
+	// 	when_transferable
+	// 	returns (bool o_success)
+	// {
+	// 	return super.transferFrom(_from, _recipient, _amount);
+	// }
+	 function transferFrom(address _from, address _to, uint _value) 
+	 	when_transferable
+	 	canTransfer(_from, _value) {
+	   return super.transferFrom(_from, _to, _value);
+	 }
 }

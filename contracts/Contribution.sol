@@ -1,9 +1,11 @@
 pragma solidity ^0.4.6;
 
 import "./GUPToken.sol";
-import "./SafeMath.sol";
+// import "./SafeMath.sol";
+import 'zeppelin-solidity/contracts/SafeMath.sol';
 
-contract Contribution is SafeMath {
+contract Contribution /*is SafeMath*/ {
+	using SafeMath for uint;
 
 	//FIELDS
 
@@ -102,9 +104,22 @@ contract Contribution is SafeMath {
 		multisigAddress = _multisig;
 		matchpoolAddress = _matchpool;
 		gupToken = new GUPToken(this, publicEndTime);
-		gupToken.createIlliquidToken(matchpoolAddress, ALLOC_ILLIQUID_TEAM);
-		gupToken.createToken(matchpoolAddress, ALLOC_BOUNTIES);
+
+		// team
+		// gupToken.createIlliquidToken(matchpoolAddress, ALLOC_ILLIQUID_TEAM);
+
+		gupToken.grantVestedTokens(matchpoolAddress, 
+				ALLOC_ILLIQUID_TEAM,
+				uint64(_publicStartTime),
+				uint64(_publicStartTime + (24 weeks)),
+				uint64(_publicStartTime + (1 years))
+			);
 		gupToken.createToken(matchpoolAddress, ALLOC_LIQUID_TEAM);
+
+		// bounties
+		gupToken.createToken(matchpoolAddress, ALLOC_BOUNTIES);
+		
+		// TODO - what is that?
 		gupToken.createToken(matchpoolAddress, ALLOC_NEW_USERS);
 	}
 
@@ -138,7 +153,9 @@ contract Contribution is SafeMath {
 		internal
 		returns (uint o_amount)
 	{
-		o_amount = safeDiv(safeMul(msg.value, _rate), 1 ether);
+
+		o_amount = msg.value.mul(_rate).div(1 ether);
+		// o_amount = div(mul(msg.value, _rate), 1 ether);
 		if (o_amount > _remaining) throw;
 		if (!multisigAddress.send(msg.value)) throw;
 		if (!gupToken.createToken(msg.sender, o_amount)) throw; //change to match create token
