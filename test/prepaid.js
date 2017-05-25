@@ -48,7 +48,7 @@ contract('Pre-period', function(accounts){
   });
   it("Should have a BTCSuisse Account", function(){
     return Contribution.deployed().then(function(instance){
-      return instance.BTCSuisse().then(function(instance){
+      return instance.btcsAddress().then(function(instance){
         assert.equal(instance,BTCSUISSE,"mis-match");
         console.log("BTC Account: ", instance.toString())
       });
@@ -56,7 +56,7 @@ contract('Pre-period', function(accounts){
   });
   it("Should have a Matchpool account", function(){
     return Contribution.deployed().then(function(instance){
-      return instance.matchpool().then(function(instance){
+      return instance.matchpoolAddress().then(function(instance){
         assert.equal(instance,MATCHPOOL,"mis-match");
         console.log("matchpool account: ", instance.toString())
       });
@@ -64,8 +64,8 @@ contract('Pre-period', function(accounts){
   });
   it("Should have a multisig account", function(){
     return Contribution.deployed().then(function(instance){
-      return instance.matchpool().then(function(instance){
-        assert.equal(instance,MATCHPOOL,"mis-match");
+      return instance.multisigAddress().then(function(instance){
+        assert.equal(instance,MULTISIG,"mis-match");
         console.log("multisig account: ", instance.toString())
       });
     });
