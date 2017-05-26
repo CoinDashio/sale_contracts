@@ -108,12 +108,12 @@ contract Contribution /*is SafeMath*/ {
 		// team
 		// gupToken.createIlliquidToken(matchpoolAddress, ALLOC_ILLIQUID_TEAM);
 
-		gupToken.grantVestedTokens(matchpoolAddress, 
-				ALLOC_ILLIQUID_TEAM,
-				uint64(_publicStartTime),
-				uint64(_publicStartTime + (24 weeks)),
-				uint64(_publicStartTime + (1 years))
-			);
+		// gupToken.grantVestedTokens(matchpoolAddress, 
+		// 		ALLOC_ILLIQUID_TEAM,
+		// 		uint64(_publicStartTime),
+		// 		uint64(_publicStartTime + (24 weeks)),
+		// 		uint64(_publicStartTime + (1 years))
+		// 	);
 		gupToken.createToken(matchpoolAddress, ALLOC_LIQUID_TEAM);
 
 		// bounties
