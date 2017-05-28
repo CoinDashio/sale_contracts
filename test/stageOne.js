@@ -1,65 +1,103 @@
 var Contribution = artifacts.require("./Contribution.sol");
 var GUPToken = artifacts.require("./GUPToken.sol");
+var GUPMultiSigWallet = artifacts.require("./GUPMultiSigWallet.sol")
 var send = require("./util").send;
 var guptokenadd;
 var GUPTokenDeployed;
 var ContributionDeployed;
-
-
+var ownerAdd;
+var GUPMultiSigWallet;
+var multisigAdd;
+var publicStartTime;
 
 contract('stage one', function(accounts){
-  const BTCSUISSE = accounts[0];
   const MATCHPOOL = accounts[2];
-  const MULTISIG = accounts[1];
 
   //Fetch deployed contracts
   before("fetch deployed instances",function(){
-    return Contribution.deployed().then(function(instance){
-      ContributionDeployed = instance;
-      return instance.gupToken().then(function(instance){
-        guptokenadd = instance;
-        GUPTokenDeployed = GUPToken.at(guptokenadd);
+    return Contribution.deployed()
+        .then(function(instance){
+          ContributionDeployed = instance;
+          return ContributionDeployed.ownerAddress() 
+        })
+        .then(function(address){
+          ownerAdd = address;
+          return ContributionDeployed.gupToken()
+        })
+        .then(function(instance){
+          guptokenadd = instance;
+          GUPTokenDeployed = GUPToken.at(guptokenadd);
+          return GUPMultiSigWallet.deployed()
+        })
+        .then(function(instance){
+          return instance.address
+        })
+        .then(function(address){
+          multisigAdd = address;
+        })
+  })
 
-      })
-    })
+  before("should have a start time", function(){
+    return ContributionDeployed.publicStartTime().then(function(instance){
+      publicStartTime = instance;
+      assert.notEqual(instance,0,"starttime equals zero");
+      console.log("public Start Time", instance.toString());
+    });
   });
 
   before("advance time", function(){
     return ContributionDeployed.publicStartTime().then(function(instance){
       console.log("old time: ", web3.eth.getBlock('latest').timestamp)
-      send('evm_increaseTime',[3600],function(err,result){
+      send('evm_increaseTime',[publicStartTime - web3.eth.getBlock('latest').timestamp - 1],function(err,result){
         send('evm_mine',[],function(){
           console.log("new time: ", web3.eth.getBlock('latest').timestamp)
         })
       });
     })
   })
-  it("BTCS Should throw and not be able to buy during crowdsale", function(){
-    return ContributionDeployed.preBuy({from: BTCSUISSE, value: web3.toWei(1, 'ether')}).then(function(arg){
-      console.log(arg);
-      return GUPTokenDeployed.balanceOf(BTCSUISSE).then(function(instance){
-        assert.equal(instance.toNumber(),0,"mis-match");
-        console.log("BTCS Balance ", instance.toNumber())
-      })
-    }).catch(function(instance){
-      return GUPTokenDeployed.balanceOf(BTCSUISSE).then(function(instance){
-        assert.equal(instance.toNumber(),0,"mis-match");
-        console.log("BTCS Balance ", instance.toNumber())
-      })
-    });;
-  });
-  it("buy should work and send GUP to account", function(done){
-    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(1, 'ether')},(err,result)=>{
-      if (!err) {
-        GUPTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
-          assert.equal(instance.toNumber(), 120000,"mis-match");
-          console.log("purchased GUP: ", instance.toNumber())
 
-          done()
-        })
-      }
-    });
+  // it("BTCS Should throw and not be able to buy during crowdsale", function(){
+  //   return ContributionDeployed.preBuy({from: BTCSUISSE, value: web3.toWei(1, 'ether')}).then(function(arg){
+  //     console.log(arg);
+  //     return GUPTokenDeployed.balanceOf(BTCSUISSE).then(function(instance){
+  //       assert.equal(instance.toNumber(),0,"mis-match");
+  //       console.log("BTCS Balance ", instance.toNumber())
+  //     })
+  //   }).catch(function(instance){
+  //     return GUPTokenDeployed.balanceOf(BTCSUISSE).then(function(instance){
+  //       assert.equal(instance.toNumber(),0,"mis-match");
+  //       console.log("BTCS Balance ", instance.toNumber())
+  //     })
+  //   });;
+  // });
+  
+  /*
+    Pre commitments
+  */
+  it("Pre committmets Should NOT be able to buy when contribuition starts", function(){
+    return ContributionDeployed.preCommit(web3.eth.accounts[3], {from: ownerAdd,value: web3.toWei(100, 'ether')})
+      .then(function(){
+        assert.true(false,"mis-match");
+      })
+      .catch(function(error){
+        return GUPTokenDeployed.balanceOf(web3.eth.accounts[3])
+          .then(function(balance){
+            assert.equal(balance.toNumber(),0,"mis-match");
+         })
+      })
+  });
+  
+  it("buy should work and send Gup + ether", function(){
+    return web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(100, 'ether')})
+      .then(function(){
+        return GUPTokenDeployed.balanceOf(web3.eth.accounts[3])
+      })
+      .then(function(balance){
+          assert.equal(balance.toNumber(),1250000,"mis-match");
+          console.log("contribuition balance ", balance.toNumber())
+       })
   })
+
   it("no more than 60,000,000 GUP should be created", function(done){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(675000, 'ether')},(err,result)=>{
       if (err) {

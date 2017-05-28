@@ -16,26 +16,24 @@ contract Contribution /*is SafeMath*/ {
 	uint public constant STAGE_THREE_TIME_END = 2 weeks;
 	uint public constant STAGE_FOUR_TIME_END = 4 weeks;
 	//Prices of GUP
-	uint public constant PRICE_STAGE_ONE = 120000;
-	uint public constant PRICE_STAGE_TWO = 110000;
-	uint public constant PRICE_STAGE_THREE = 100000;
-	uint public constant PRICE_STAGE_FOUR = 90000;
-	uint public constant PRICE_BTCS = 120000;
+	uint public constant PRICE_STAGE_ONE = 12500; // will result in 80K ether raised
+	uint public constant PRICE_STAGE_TWO = 10000;
+	uint public constant PRICE_STAGE_THREE = 7500;
+	uint public constant PRICE_STAGE_FOUR = 5000;
+
 	//GUP Token Limits
-	uint public constant MAX_SUPPLY =        100000000000;
-	uint public constant ALLOC_ILLIQUID_TEAM = 8000000000;
-	uint public constant ALLOC_LIQUID_TEAM =  13000000000;
-	uint public constant ALLOC_BOUNTIES =      2000000000;
-	uint public constant ALLOC_NEW_USERS =    17000000000;
-	uint public constant ALLOC_CROWDSALE =    60000000000;
-	uint public constant BTCS_PORTION_MAX = 125000 * PRICE_BTCS;
+	uint public constant MAX_SUPPLY =        1000000000; // billion CDT
+	uint public constant ALLOC_LIQUID_TEAM =  200000000; // 200M CDT = 20%
+	uint public constant ALLOC_BOUNTIES =      10000000; // 10M CDT = 1%
+	uint public constant ALLOC_COMPANY =    290000000; // 290M CDT = 29%
+	uint public constant ALLOC_CROWDSALE =    500000000; // 500M CDT = 50%
+
 	//ASSIGNED IN INITIALIZATION
 	//Start and end times
 	uint public publicStartTime; //Time in seconds public crowd fund starts.
 	uint public privateStartTime; //Time in seconds when BTCSuisse can purchase up to 125000 ETH worth of GUP;
 	uint public publicEndTime; //Time in seconds crowdsale ends
 	//Special Addresses
-	address public btcsAddress; //Address used by BTCSuisse
 	address public multisigAddress; //Address to which all ether flows.
 	address public matchpoolAddress; //Address to which ALLOC_BOUNTIES, ALLOC_LIQUID_TEAM, ALLOC_NEW_USERS, ALLOC_ILLIQUID_TEAM is sent to.
 	address public ownerAddress; //Address of the contract owner. Can halt the crowdsale.
@@ -62,12 +60,6 @@ contract Contribution /*is SafeMath*/ {
 		_;
 	}
 
-	//May only be called by BTC Suisse
-	modifier only_btcs() {
-		if (msg.sender != btcsAddress) throw;
-		_;
-	}
-
 	//May only be called by the owner address
 	modifier only_owner() {
 		if (msg.sender != ownerAddress) throw;
@@ -90,7 +82,6 @@ contract Contribution /*is SafeMath*/ {
 
 	//Initialization function. Deploys GUPToken contract assigns values, to all remaining fields, creates first entitlements in the GUP Token contract.
 	function Contribution(
-		address _btcs,
 		address _multisig,
 		address _matchpool,
 		uint _publicStartTime,
@@ -100,27 +91,24 @@ contract Contribution /*is SafeMath*/ {
 		publicStartTime = _publicStartTime;
 		privateStartTime = _privateStartTime;
 		publicEndTime = _publicStartTime + 4 weeks;
-		btcsAddress = _btcs;
 		multisigAddress = _multisig;
 		matchpoolAddress = _matchpool;
-		gupToken = new GUPToken(this, publicEndTime);
+		gupToken = new GUPToken(this, publicStartTime); // all tokens initially assigned to company's account
 
 		// team
-		// gupToken.createIlliquidToken(matchpoolAddress, ALLOC_ILLIQUID_TEAM);
-
 		// gupToken.grantVestedTokens(matchpoolAddress, 
 		// 		ALLOC_ILLIQUID_TEAM,
 		// 		uint64(_publicStartTime),
 		// 		uint64(_publicStartTime + (24 weeks)),
 		// 		uint64(_publicStartTime + (1 years))
 		// 	);
-		gupToken.createToken(matchpoolAddress, ALLOC_LIQUID_TEAM);
+		gupToken.createToken(matchpoolAddress, ALLOC_LIQUID_TEAM); // = 20%
 
 		// bounties
-		gupToken.createToken(matchpoolAddress, ALLOC_BOUNTIES);
+		gupToken.createToken(matchpoolAddress, ALLOC_BOUNTIES); // = 1%
 		
-		// TODO - what is that?
-		gupToken.createToken(matchpoolAddress, ALLOC_NEW_USERS);
+		// company
+		gupToken.createToken(matchpoolAddress, (ALLOC_COMPANY + ALLOC_CROWDSALE)); // = 79%
 	}
 
 	//May be used by owner of contract to halt crowdsale and no longer except ether.
@@ -149,30 +137,16 @@ contract Contribution /*is SafeMath*/ {
 	// ether.
 	// Returns `amount` in scope as the number of GUP tokens that it will
 	// purchase.
-	function processPurchase(uint _rate, uint _remaining)
+	function processPurchase(address _to, uint _rate, uint _remaining)
 		internal
 		returns (uint o_amount)
 	{
 
 		o_amount = msg.value.mul(_rate).div(1 ether);
-		// o_amount = div(mul(msg.value, _rate), 1 ether);
-		if (o_amount > _remaining) throw;
+		if (gupSold + o_amount > ALLOC_CROWDSALE) throw;
 		if (!multisigAddress.send(msg.value)) throw;
-		if (!gupToken.createToken(msg.sender, o_amount)) throw; //change to match create token
+		if (!gupToken.assignTokensDuringContribuition(matchpoolAddress, _to, o_amount)) throw;
 		gupSold += o_amount;
-	}
-
-	//Special Function can only be called by BTC Suisse and only during the pre-crowdsale period.
-	//Allows the purchase of up to 125000 Ether worth of GUP Tokens.
-	function preBuy()
-		payable
-		is_pre_crowdfund_period
-		only_btcs
-		is_not_halted
-	{
-		uint amount = processPurchase(PRICE_BTCS, BTCS_PORTION_MAX - btcsPortionTotal);
-		btcsPortionTotal += amount;
-		PreBuy(amount);
 	}
 
 	//Default function called by sending Ether to this address with no arguments.
@@ -182,7 +156,18 @@ contract Contribution /*is SafeMath*/ {
 		is_crowdfund_period
 		is_not_halted
 	{
-		uint amount = processPurchase(getPriceRate(), ALLOC_CROWDSALE - gupSold);
+		uint amount = processPurchase(msg.sender, getPriceRate(), ALLOC_CROWDSALE - gupSold);
+		Buy(msg.sender, amount);
+	}
+
+	// allow to assgin pre-commitments
+	function preCommit(address _to) 
+		only_owner
+		is_pre_crowdfund_period
+		payable
+		is_not_halted
+	{
+		uint amount = processPurchase(_to, getPriceRate(), ALLOC_CROWDSALE - gupSold);
 		Buy(msg.sender, amount);
 	}
 
