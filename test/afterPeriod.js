@@ -47,7 +47,7 @@ contract('after event', function(accounts){
         return GUPTokenDeployed.balanceOf(web3.eth.accounts[4])
       })
       .then(function(balance){
-        assert.equal(balance.toNumber(),1250000,"mis-match");
+        assert.equal(balance.toNumber(),625000,"mis-match");
         console.log("Pre preCommittmets Balance ", balance.toNumber())
       })
   });
@@ -81,13 +81,13 @@ contract('after event', function(accounts){
     })
   })
   it("Can't transfer more than account has", function(){
-    return GUPTokenDeployed.transfer(accounts[5],1250000,{from:accounts[4]})
+    return GUPTokenDeployed.transfer(accounts[5],625000,{from:accounts[4]})
     .then(function(){
       assert.true(false, "mis-match");
     })
     .catch(function(balance){
       return GUPTokenDeployed.balanceOf(accounts[4]).then(function(instance){
-          assert.equal(instance.toNumber(),1249950,"tokens transferred")
+          assert.equal(instance.toNumber(),624950,"tokens transferred")
       })
     })
   })
@@ -98,7 +98,7 @@ contract('after event', function(accounts){
     })
     .catch(function(balance){
       return GUPTokenDeployed.balanceOf(accounts[4]).then(function(instance){
-          assert.equal(instance.toNumber(),1249950,"tokens transferred")
+          assert.equal(instance.toNumber(),624950,"tokens transferred")
       })
     })
   })
