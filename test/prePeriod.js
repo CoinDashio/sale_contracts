@@ -216,13 +216,24 @@ contract('Pre-period', function(accounts){
   });
 
   /*
+    total wei received
+  */
+  it("total wei received in pre committmets", function(){
+    return ContributionDeployed.ethReceived()
+      .then(function(balance){
+        assert.equal(web3.fromWei(balance.toNumber()),200,"mis-match");
+        console.log("total wei received ", web3.fromWei(balance.toNumber()))
+      })
+  });
+
+  /*
     total CDT sold
   */
   it("total CDT sold in pre committmets", function(){
     return ContributionDeployed.gupSold()
       .then(function(balance){
         assert.equal(balance.toNumber(),1250000,"mis-match");
-        console.log("total CDT sold ", balance.toNumber())
+        console.log("total wei received ", balance.toNumber())
       })
   });
 

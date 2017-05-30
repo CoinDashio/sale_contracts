@@ -126,7 +126,7 @@ contract('stage one', function(accounts){
     Buying
   */
   it("buy should work and send Gup + ether", function(done){
-    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(100, 'ether')},(err,result)=>{
+    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(100, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
         GUPTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
           assert.equal(instance.toNumber(), 625000,"mis-match");
@@ -142,7 +142,7 @@ contract('stage one', function(accounts){
   })
 
   it("Can buy up to 80K ETH", function(done){
-    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(79900, 'ether')},(err,result)=>{
+    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(79900, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
         GUPTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
           assert.equal(instance.toNumber(), 500000000,"mis-match");
@@ -158,7 +158,7 @@ contract('stage one', function(accounts){
   })
 
   it("no more than 80,000 ETH can be contribuited", function(done){
-    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[5],value: web3.toWei(1, 'ether')},(err,result)=>{
+    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[5],value: web3.toWei(1, 'ether'), gas:200000},(err,result)=>{
       if (err) {
         GUPTokenDeployed.balanceOf(web3.eth.accounts[5]).then(function(instance){
           assert.equal(instance.toNumber(), 0,"mis-match");
@@ -172,6 +172,17 @@ contract('stage one', function(accounts){
       }
     });
   })
+
+  /*
+    total CDT sold
+  */
+  it("total CDT sold in pre committmets", function(){
+    return ContributionDeployed.gupSold()
+      .then(function(balance){
+        assert.equal(balance.toNumber(),500000000,"mis-match");
+        console.log("total wei received ", balance.toNumber())
+      })
+  });
 
   /*
     check multisig wallet balance

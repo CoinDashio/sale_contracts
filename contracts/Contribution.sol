@@ -42,7 +42,7 @@ contract Contribution /*is SafeMath*/ {
 	GUPToken public gupToken; //External token contract hollding the GUP
 	//Running totals
 	uint public ethReceived; //Total Ether raised.
-	// uint public gupSold; //Total GUP created
+	uint public gupSold; //Total GUP created
 	// uint public btcsPortionTotal; //Total of Tokens purchased by BTC Suisse. Not to exceed BTCS_PORTION_MAX.
 	//booleans
 	bool public halted; //halts the crowd sale if true.
@@ -152,6 +152,7 @@ contract Contribution /*is SafeMath*/ {
 		if (!gupToken.assignTokensDuringContribuition(matchpoolAddress, _to, o_amount)) throw;
 
 		ethReceived = ethReceived.add(msg.value);
+		gupSold = gupSold.add(o_amount);
 	}
 
 	//Default function called by sending Ether to this address with no arguments.

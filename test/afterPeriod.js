@@ -8,7 +8,7 @@ var ownerAdd;
 var multisigAdd;
 var publicEndTime;
 
-contract('after event', function(accounts){
+contract('after period', function(accounts){
   const MATCHPOOL = accounts[2];
 
   //Fetch deployed contracts
