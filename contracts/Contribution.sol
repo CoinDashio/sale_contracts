@@ -16,9 +16,9 @@ contract Contribution /*is SafeMath*/ {
 	uint public constant STAGE_THREE_TIME_END = 2 weeks;
 	uint public constant STAGE_FOUR_TIME_END = 4 weeks;
 	//Prices of GUP
-	uint public constant PRICE_STAGE_ONE = 12500; // will result in 80K ether raised
-	uint public constant PRICE_STAGE_TWO = 10000;
-	uint public constant PRICE_STAGE_THREE = 7500;
+	uint public constant PRICE_STAGE_ONE = 6250; // will result in 80K ether raised
+	uint public constant PRICE_STAGE_TWO = 6000;
+	uint public constant PRICE_STAGE_THREE = 5750;
 	uint public constant PRICE_STAGE_FOUR = 5000;
 
 	//GUP Token Limits
@@ -93,7 +93,7 @@ contract Contribution /*is SafeMath*/ {
 		publicEndTime = _publicStartTime + 4 weeks;
 		multisigAddress = _multisig;
 		matchpoolAddress = _matchpool;
-		gupToken = new GUPToken(this, publicStartTime); // all tokens initially assigned to company's account
+		gupToken = new GUPToken(this, publicEndTime); // all tokens initially assigned to company's account
 
 		// team
 		// gupToken.grantVestedTokens(matchpoolAddress, 
@@ -143,10 +143,10 @@ contract Contribution /*is SafeMath*/ {
 	{
 
 		o_amount = msg.value.mul(_rate).div(1 ether);
-		if (gupSold + o_amount > ALLOC_CROWDSALE) throw;
+		if (gupSold.add(o_amount) > ALLOC_CROWDSALE) throw;
 		if (!multisigAddress.send(msg.value)) throw;
 		if (!gupToken.assignTokensDuringContribuition(matchpoolAddress, _to, o_amount)) throw;
-		gupSold += o_amount;
+		gupSold = gupSold.add(o_amount);
 	}
 
 	//Default function called by sending Ether to this address with no arguments.
