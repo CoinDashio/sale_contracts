@@ -48,7 +48,7 @@ contract('stage one', function(accounts){
   before("advance time", function(){
     return ContributionDeployed.publicStartTime().then(function(instance){
       console.log("old time: ", web3.eth.getBlock('latest').timestamp)
-      send('evm_increaseTime',[publicStartTime - web3.eth.getBlock('latest').timestamp - 1],function(err,result){
+      send('evm_increaseTime',[publicStartTime - web3.eth.getBlock('latest').timestamp + 1 ],function(err,result){
         send('evm_mine',[],function(){
           console.log("new time: ", web3.eth.getBlock('latest').timestamp)
         })
@@ -56,21 +56,15 @@ contract('stage one', function(accounts){
     })
   })
 
-  // it("BTCS Should throw and not be able to buy during crowdsale", function(){
-  //   return ContributionDeployed.preBuy({from: BTCSUISSE, value: web3.toWei(1, 'ether')}).then(function(arg){
-  //     console.log(arg);
-  //     return GUPTokenDeployed.balanceOf(BTCSUISSE).then(function(instance){
-  //       assert.equal(instance.toNumber(),0,"mis-match");
-  //       console.log("BTCS Balance ", instance.toNumber())
-  //     })
-  //   }).catch(function(instance){
-  //     return GUPTokenDeployed.balanceOf(BTCSUISSE).then(function(instance){
-  //       assert.equal(instance.toNumber(),0,"mis-match");
-  //       console.log("BTCS Balance ", instance.toNumber())
-  //     })
-  //   });;
-  // });
-  
+  // TODO - change once we have clear vesting and distro strucutre
+  it("company should have 1,000,000,000 CDT", function(){
+    return GUPTokenDeployed.balanceOf(MATCHPOOL)
+          .then(function(balance){
+            assert.equal(balance.toNumber(),1000000000,"mis-match");
+            console.log("company has " + balance.toNumber() + " CDT")
+          })
+  });
+
   /*
     Pre commitments
   */
@@ -78,70 +72,135 @@ contract('stage one', function(accounts){
     return ContributionDeployed.preCommit(web3.eth.accounts[3], {from: ownerAdd,value: web3.toWei(100, 'ether')})
       .then(function(){
         assert.true(false,"mis-match");
+        done()
       })
       .catch(function(error){
         return GUPTokenDeployed.balanceOf(web3.eth.accounts[3])
           .then(function(balance){
             assert.equal(balance.toNumber(),0,"mis-match");
+            console.log(web3.eth.accounts[3] + " account has " + balance.toNumber() + " balance");
          })
       })
   });
-  
-  it("buy should work and send Gup + ether", function(){
-    return web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(100, 'ether')})
-      .then(function(){
-        return GUPTokenDeployed.balanceOf(web3.eth.accounts[3])
-      })
-      .then(function(balance){
-          assert.equal(balance.toNumber(),1250000,"mis-match");
-          console.log("contribuition balance ", balance.toNumber())
-       })
-  })
 
-  it("no more than 60,000,000 GUP should be created", function(done){
-    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(675000, 'ether')},(err,result)=>{
-      if (err) {
-        GUPTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
-          assert.equal(instance.toNumber(), 120000,"mis-match");
-          console.log("purchased GUP: ", instance.toNumber())
-
-          done()
-        })
-      }
-    });
-  })
-  it("Tokens should not be transferrable", function(){
-    return GUPTokenDeployed.transfer(accounts[5],50,{from:MATCHPOOL}).catch(function(){
-      return GUPTokenDeployed.balanceOf(accounts[5]).then(function(instance){
-        assert.equal(instance.toNumber(),0,"tokens transferred")
-      })
-    })
-  })
+  /*
+    halting 
+  */
   it("is not halted", function(){
-    return ContributionDeployed.halted().then(function(instance){
-      assert.equal(instance,false,"mis-match");
-      console.log("halted: ", instance)
-    });
-  });
-  it("test halting", function(){
-    return ContributionDeployed.toggleHalt(true,{from: accounts[0]}).then(function(){
-      return ContributionDeployed.halted().then(function(instance){
-        assert.equal(instance,true,"mis-match");
+    return ContributionDeployed.halted()
+      .then(function(instance){
+        assert.equal(instance,false,"mis-match");
         console.log("halted: ", instance)
       });
-    });
   });
-  it("buy should not work and should throw", function(){
+  it("test halting", function(){
+    return ContributionDeployed.toggleHalt(true,{from: accounts[0]})
+      .then(function(){
+        return ContributionDeployed.halted()
+      })
+      .then(function(instance){
+          assert.equal(instance,true,"mis-match");
+          console.log("halted: ", instance)
+      });
+  });
+  it("buy should not work and should throw", function(done){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(1, 'ether')},(err,result)=>{
       if (!err) {
         assert.fail("")
       }
+      done();
     });
   })
-  afterEach("contract should never have any ether", function(done){
-    assert.equal(web3.eth.getBalance(ContributionDeployed.address).toNumber(),0,"is not zero")
+  it("cancel halting", function(){
+    return ContributionDeployed.toggleHalt(false,{from: accounts[0]})
+      .then(function(){
+        return ContributionDeployed.halted()
+      })
+      .then(function(instance){
+          assert.equal(instance,false,"mis-match");
+          console.log("halted: ", instance)
+      });
+  });
+  
+  /*
+    Buying
+  */
+  it("buy should work and send Gup + ether", function(done){
+    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(100, 'ether')},(err,result)=>{
+      if (!err && result) {
+        GUPTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
+          assert.equal(instance.toNumber(), 625000,"mis-match");
+          console.log("purchased GUP: ", instance.toNumber())
+          done()
+        })
+      }
+      else {
+        assert.equal(1,0,err);
+        done()
+      }
+    });
+  })
+
+  it("Can buy up to 80K ETH", function(done){
+    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(79900, 'ether')},(err,result)=>{
+      if (!err && result) {
+        GUPTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
+          assert.equal(instance.toNumber(), 500000000,"mis-match");
+          console.log("purchased GUP: ", instance.toNumber())
+          done()
+        })
+      }
+      else {
+        assert.true(false,"mis-match");
+        done()
+      }
+    });
+  })
+
+  it("no more than 80,000 ETH can be contribuited", function(done){
+    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[5],value: web3.toWei(1, 'ether')},(err,result)=>{
+      if (err) {
+        GUPTokenDeployed.balanceOf(web3.eth.accounts[5]).then(function(instance){
+          assert.equal(instance.toNumber(), 0,"mis-match");
+          console.log("purchased GUP: ", instance.toNumber())
+          done()
+        })
+      }
+      else {
+        assert.fail("mis-match");
+        done()
+      }
+    });
+  })
+
+  /*
+    check multisig wallet balance
+  */
+  it("multisig wallet contains 80000 ethers", function(){
+    let balance = web3.eth.getBalance(multisigAdd)
+    assert.equal(web3.fromWei(balance.toNumber(),'ether'), 80000, "mis-match");
+    console.log("multisig wallet ended up with " + web3.fromWei(balance.toNumber(),'ether') + " ethers");
+  });
+
+  /*
+    transferability 
+  */
+  it("Tokens should not be transferrable", function(){
+    return GUPTokenDeployed.transfer(accounts[5],50,{from:MATCHPOOL})
+    .then(function(instance){
+        assert.fail("mis-match");
+    })
+    .catch(function(){
+      return GUPTokenDeployed.balanceOf(accounts[5])
+        .then(function(instance){
+          assert.equal(instance.toNumber(),0,"tokens transferred")
+        })
+    })
+  })
+
+  afterEach("contract should never have any ether", function(){
     console.log("Contract Balance is: ",web3.eth.getBalance(ContributionDeployed.address).toNumber())
-    done()
+    assert.equal(web3.eth.getBalance(ContributionDeployed.address).toNumber(),0,"is not zero")
   })
   
 });

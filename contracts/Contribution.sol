@@ -22,6 +22,7 @@ contract Contribution /*is SafeMath*/ {
 	uint public constant PRICE_STAGE_FOUR = 5000;
 
 	//GUP Token Limits
+	uint public constant CAP =        80000 ether; 
 	uint public constant MAX_SUPPLY =        1000000000; // billion CDT
 	uint public constant ALLOC_LIQUID_TEAM =  200000000; // 200M CDT = 20%
 	uint public constant ALLOC_BOUNTIES =      10000000; // 10M CDT = 1%
@@ -40,9 +41,9 @@ contract Contribution /*is SafeMath*/ {
 	//Contracts
 	GUPToken public gupToken; //External token contract hollding the GUP
 	//Running totals
-	uint public etherRaised; //Total Ether raised.
-	uint public gupSold; //Total GUP created
-	uint public btcsPortionTotal; //Total of Tokens purchased by BTC Suisse. Not to exceed BTCS_PORTION_MAX.
+	uint public ethReceived; //Total Ether raised.
+	// uint public gupSold; //Total GUP created
+	// uint public btcsPortionTotal; //Total of Tokens purchased by BTC Suisse. Not to exceed BTCS_PORTION_MAX.
 	//booleans
 	bool public halted; //halts the crowd sale if true.
 
@@ -93,6 +94,7 @@ contract Contribution /*is SafeMath*/ {
 		publicEndTime = _publicStartTime + 4 weeks;
 		multisigAddress = _multisig;
 		matchpoolAddress = _matchpool;
+
 		gupToken = new GUPToken(this, publicEndTime); // all tokens initially assigned to company's account
 
 		// team
@@ -137,16 +139,19 @@ contract Contribution /*is SafeMath*/ {
 	// ether.
 	// Returns `amount` in scope as the number of GUP tokens that it will
 	// purchase.
-	function processPurchase(address _to, uint _rate, uint _remaining)
+	function processPurchase(address _to, uint _rate)
 		internal
 		returns (uint o_amount)
 	{
 
 		o_amount = msg.value.mul(_rate).div(1 ether);
-		if (gupSold.add(o_amount) > ALLOC_CROWDSALE) throw;
+
+		if (ethReceived.add(msg.value) > CAP) throw;
+
 		if (!multisigAddress.send(msg.value)) throw;
 		if (!gupToken.assignTokensDuringContribuition(matchpoolAddress, _to, o_amount)) throw;
-		gupSold = gupSold.add(o_amount);
+
+		ethReceived = ethReceived.add(msg.value);
 	}
 
 	//Default function called by sending Ether to this address with no arguments.
@@ -156,7 +161,7 @@ contract Contribution /*is SafeMath*/ {
 		is_crowdfund_period
 		is_not_halted
 	{
-		uint amount = processPurchase(msg.sender, getPriceRate(), ALLOC_CROWDSALE - gupSold);
+		uint amount = processPurchase(msg.sender, getPriceRate());
 		Buy(msg.sender, amount);
 	}
 
@@ -167,7 +172,7 @@ contract Contribution /*is SafeMath*/ {
 		payable
 		is_not_halted
 	{
-		uint amount = processPurchase(_to, getPriceRate(), ALLOC_CROWDSALE - gupSold);
+		uint amount = processPurchase(_to, getPriceRate());
 		Buy(msg.sender, amount);
 	}
 
