@@ -81,25 +81,6 @@ contract('Pre-period', function(accounts){
   });
   //END
 
-
-  /*
-    Initial allocations and vesting
-  */
-  it("Company's CDT balance on Initiallization", function(){
-    return GUPTokenDeployed.balanceOf(MATCHPOOL)
-      .then(function(balance){
-        assert.equal(balance.toNumber(),500000000,"mis-match");
-        console.log("Company's CDT Balance ", balance.toNumber())
-      })
-  });
-  it("Company's vested CDT balance on Initiallization", function(){
-    return GUPTokenDeployed.vestedBalanceOf(MATCHPOOL)
-      .then(function(balance){
-        assert.equal(balance.toNumber(),110000000 /* liquid team + bounty */,"mis-match");
-        console.log("Company's vested CDT Balance ", balance.toNumber())
-      })
-  });
-
   /*
     confribuition
   */

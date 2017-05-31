@@ -92,19 +92,14 @@ contract Contribution /*is SafeMath*/ {
 		ownerAddress = msg.sender;
 		publicStartTime = _publicStartTime;
 		privateStartTime = _privateStartTime;
-		publicEndTime = _publicStartTime + 4 weeks;
+		publicEndTime = _publicStartTime + STAGE_FOUR_TIME_END; // end of Contribution
 		multisigAddress = _multisig;
 		matchpoolAddress = _matchpool;
 
 		gupToken = new GUPToken(MAX_SUPPLY, publicEndTime); // all tokens initially assigned to company's account
 
 		// team
-		gupToken.grantVestedTokens(matchpoolAddress, 
-				ALLOC_ILLIQUID_TEAM,
-				uint64(_publicStartTime),
-				uint64(_publicStartTime + (24 weeks)), // cliff
-				uint64(_publicStartTime + (1 years)) // vesting
-			); // 10%
+		allocateTokensWithVestingToTeam(publicEndTime); // total 10%
 		gupToken.assignTokensDuringContribuition(matchpoolAddress, ALLOC_LIQUID_TEAM); // = 10%
 
 		// bounties
@@ -113,10 +108,43 @@ contract Contribution /*is SafeMath*/ {
 		// company
 		gupToken.grantVestedTokens(matchpoolAddress, 
 				ALLOC_COMPANY,
-				uint64(_publicStartTime),
-				uint64(_publicStartTime + (24 weeks)), // cliff
-				uint64(_publicStartTime + (1 years)) // vesting
+				uint64(publicEndTime),
+				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
+				uint64(publicEndTime + (52 weeks)) // vesting of 1 year
 			); // 29%
+	}
+
+	function allocateTokensWithVestingToTeam(uint time) private {
+		gupToken.grantVestedTokens(0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778, 
+				20000000,
+				uint64(time),
+				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
+				uint64(publicEndTime + (52 weeks)) // vesting of 1 year
+			); // team 1
+		gupToken.grantVestedTokens(0xC09544dA6F50441c024ec150eCEDc72De558ce94, 
+				20000000,
+				uint64(time),
+				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
+				uint64(publicEndTime + (52 weeks)) // vesting of 1 year 
+			); // team 2
+		gupToken.grantVestedTokens(0xa900191B0542e27A0022a05c45c152DFa98DB026, 
+				20000000,
+				uint64(time),
+				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
+				uint64(publicEndTime + (52 weeks)) // vesting of 1 year 
+			); // team 3
+		gupToken.grantVestedTokens(0x05b481E52e1Ca0A21C147016C4df729764615Afb, 
+				20000000,
+				uint64(time),
+				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
+				uint64(publicEndTime + (52 weeks)) // vesting of 1 year 
+			); // team 4
+		gupToken.grantVestedTokens(0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183, 
+				20000000,
+				uint64(time),
+				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
+				uint64(publicEndTime + (52 weeks)) // vesting of 1 year 
+			); // team 5
 	}
 
 	//May be used by owner of contract to halt crowdsale and no longer except ether.

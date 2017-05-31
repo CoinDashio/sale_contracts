@@ -12,7 +12,6 @@ contract('after period', function(accounts){
   const MATCHPOOL = accounts[2];
 
   //Fetch deployed contracts
-  //Fetch deployed contracts
   before("fetch deployed instances",function(){
     return Contribution.deployed()
         .then(function(instance){
