@@ -38,9 +38,10 @@ contract GUPToken is VestedToken {
 	}
 
 	// Initialization contract assigns address of crowdfund contract and end time.
-	function GUPToken(address _creator, uint _endContribuitionTime) {
+	function GUPToken(uint supply, uint _endContribuitionTime) {
 		endContribuitionTime = _endContribuitionTime;
-		creator = _creator;
+		creator = msg.sender;
+		balances[msg.sender] = supply;
 	}
 
 	// Fallback function throws when called.
@@ -50,26 +51,54 @@ contract GUPToken is VestedToken {
 
 	// // Create new tokens when called by the crowdfund contract.
 	// // Only callable before the end time.
-	function createToken(address _recipient, uint _value)
-		contributable
-		only_creator
-		returns (bool o_success)
-	{
-		balances[_recipient] += _value;
-		totalSupply += _value;
-		return true;
-	}
+	// function createToken(address _recipient, uint _value)
+	// 	contributable
+	// 	only_creator
+	// 	returns (bool o_success)
+	// {
+	// 	balances[_recipient] += _value;
+	// 	totalSupply += _value;
+	// 	return true;
+	// }
 
-	// assignment is only avaible during contribuition time
-	function assignTokensDuringContribuition(address _from, address _to, uint _value)
+	/* 
+		assignment is only avaible during contribuition time
+		differs than transfer because its only open during contribuition, 
+		transfer is only open after contribuition.
+	*/
+	function assignTokensDuringContribuition(address _to, uint _value)
 	 contributable 
 	 only_creator 
-	 canTransfer(_from, _value)
+	 canTransfer(msg.sender, _value)
 	 returns (bool o_success) {
-	 	balances[_from] = balances[_from].sub(_value);
+	 	balances[msg.sender] = balances[msg.sender].sub(_value);
 	    balances[_to] = balances[_to].add(_value);
 	    return true;
 	}
+
+	function grantVestedTokens(
+    address _to,
+    uint256 _value,
+    uint64 _start,
+    uint64 _cliff,
+    uint64 _vesting) {
+
+	    if (_cliff < _start) {
+	      throw;
+	    }
+	    if (_vesting < _start) {
+	      throw;
+	    }
+	    if (_vesting < _cliff) {
+	      throw;
+	    }
+
+
+	    TokenGrant memory grant = TokenGrant(msg.sender, _value, _cliff, _vesting, _start);
+	    grants[_to].push(grant);
+
+	    assignTokensDuringContribuition(_to, _value);
+  	}
 
 	// Transfer amount of tokens from sender account to recipient.
 	// Only callable after the crowd fund end date.
@@ -86,4 +115,8 @@ contract GUPToken is VestedToken {
 	 	canTransfer(_from, _value) {
 	   return super.transferFrom(_from, _to, _value);
 	}
+
+	function vestedBalanceOf(address _owner) constant returns (uint balance) {
+	    return transferableTokens(_owner, uint64(now));
+    }
 }

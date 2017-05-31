@@ -42,7 +42,7 @@ contract('after period', function(accounts){
     buy tokens to use later
   */
   it("Pre committmets Should be able to buy early", function(){
-    return ContributionDeployed.preCommit(web3.eth.accounts[4], {from: ownerAdd,value: web3.toWei(100, 'ether')})
+    return ContributionDeployed.preCommit(web3.eth.accounts[4], {from: ownerAdd,value: web3.toWei(100, 'ether'), gas:200000})
       .then(function(){
         return GUPTokenDeployed.balanceOf(web3.eth.accounts[4])
       })
@@ -107,7 +107,7 @@ contract('after period', function(accounts){
     non contribuitable
   */
   it("buy should throw and shouldn't create GUP", function(){
-    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[6],value: web3.toWei(1, 'ether')},(err,result)=>{
+    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[6],value: web3.toWei(1, 'ether'), gas:200000},(err,result)=>{
       if (!err) {
         assert.fail("")
       }

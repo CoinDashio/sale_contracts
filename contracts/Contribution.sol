@@ -24,7 +24,8 @@ contract Contribution /*is SafeMath*/ {
 	//GUP Token Limits
 	uint public constant CAP =        80000 ether; 
 	uint public constant MAX_SUPPLY =        1000000000; // billion CDT
-	uint public constant ALLOC_LIQUID_TEAM =  200000000; // 200M CDT = 20%
+	uint public constant ALLOC_LIQUID_TEAM =  100000000; // 100M CDT = 10%
+	uint public constant ALLOC_ILLIQUID_TEAM =  100000000; // 100M CDT = 10%
 	uint public constant ALLOC_BOUNTIES =      10000000; // 10M CDT = 1%
 	uint public constant ALLOC_COMPANY =    290000000; // 290M CDT = 29%
 	uint public constant ALLOC_CROWDSALE =    500000000; // 500M CDT = 50%
@@ -95,22 +96,27 @@ contract Contribution /*is SafeMath*/ {
 		multisigAddress = _multisig;
 		matchpoolAddress = _matchpool;
 
-		gupToken = new GUPToken(this, publicEndTime); // all tokens initially assigned to company's account
+		gupToken = new GUPToken(MAX_SUPPLY, publicEndTime); // all tokens initially assigned to company's account
 
 		// team
-		// gupToken.grantVestedTokens(matchpoolAddress, 
-		// 		ALLOC_ILLIQUID_TEAM,
-		// 		uint64(_publicStartTime),
-		// 		uint64(_publicStartTime + (24 weeks)),
-		// 		uint64(_publicStartTime + (1 years))
-		// 	);
-		gupToken.createToken(matchpoolAddress, ALLOC_LIQUID_TEAM); // = 20%
+		gupToken.grantVestedTokens(matchpoolAddress, 
+				ALLOC_ILLIQUID_TEAM,
+				uint64(_publicStartTime),
+				uint64(_publicStartTime + (24 weeks)), // cliff
+				uint64(_publicStartTime + (1 years)) // vesting
+			); // 10%
+		gupToken.assignTokensDuringContribuition(matchpoolAddress, ALLOC_LIQUID_TEAM); // = 10%
 
 		// bounties
-		gupToken.createToken(matchpoolAddress, ALLOC_BOUNTIES); // = 1%
+		gupToken.assignTokensDuringContribuition(matchpoolAddress, ALLOC_BOUNTIES); // = 1%
 		
 		// company
-		gupToken.createToken(matchpoolAddress, (ALLOC_COMPANY + ALLOC_CROWDSALE)); // = 79%
+		gupToken.grantVestedTokens(matchpoolAddress, 
+				ALLOC_COMPANY,
+				uint64(_publicStartTime),
+				uint64(_publicStartTime + (24 weeks)), // cliff
+				uint64(_publicStartTime + (1 years)) // vesting
+			); // 29%
 	}
 
 	//May be used by owner of contract to halt crowdsale and no longer except ether.
@@ -149,7 +155,7 @@ contract Contribution /*is SafeMath*/ {
 		if (ethReceived.add(msg.value) > CAP) throw;
 
 		if (!multisigAddress.send(msg.value)) throw;
-		if (!gupToken.assignTokensDuringContribuition(matchpoolAddress, _to, o_amount)) throw;
+		if (!gupToken.assignTokensDuringContribuition(_to, o_amount)) throw;
 
 		ethReceived = ethReceived.add(msg.value);
 		gupSold = gupSold.add(o_amount);

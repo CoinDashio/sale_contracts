@@ -56,15 +56,6 @@ contract('stage one', function(accounts){
     })
   })
 
-  // TODO - change once we have clear vesting and distro strucutre
-  it("company should have 1,000,000,000 CDT", function(){
-    return GUPTokenDeployed.balanceOf(MATCHPOOL)
-          .then(function(balance){
-            assert.equal(balance.toNumber(),1000000000,"mis-match");
-            console.log("company has " + balance.toNumber() + " CDT")
-          })
-  });
-
   /*
     Pre commitments
   */

@@ -5,6 +5,7 @@ var send = require("./util").send;
 var guptokenadd;
 var GUPTokenDeployed;
 var ContributionDeployed;
+var ContributionDeployedAdd;
 var ownerAdd;
 var multisigAdd;
 var publicStartTime;
@@ -21,6 +22,10 @@ contract('Pre-period', function(accounts){
         })
         .then(function(address){
           ownerAdd = address;
+          return ContributionDeployed.address
+        })
+        .then(function(address){
+          ContributionDeployedAdd = address;
           return ContributionDeployed.gupToken()
         })
         .then(function(instance){
@@ -76,11 +81,30 @@ contract('Pre-period', function(accounts){
   });
   //END
 
+
+  /*
+    Initial allocations and vesting
+  */
+  it("Company's CDT balance on Initiallization", function(){
+    return GUPTokenDeployed.balanceOf(MATCHPOOL)
+      .then(function(balance){
+        assert.equal(balance.toNumber(),500000000,"mis-match");
+        console.log("Company's CDT Balance ", balance.toNumber())
+      })
+  });
+  it("Company's vested CDT balance on Initiallization", function(){
+    return GUPTokenDeployed.vestedBalanceOf(MATCHPOOL)
+      .then(function(balance){
+        assert.equal(balance.toNumber(),110000000 /* liquid team + bounty */,"mis-match");
+        console.log("Company's vested CDT Balance ", balance.toNumber())
+      })
+  });
+
   /*
     confribuition
   */
   it("buy should not work and should throw", function(){
-    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(1, 'ether')},(err,result)=>{
+    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(1, 'ether'), gas:200000},(err,result)=>{
       if (!err) {
         assert.fail("")
       }
@@ -91,7 +115,7 @@ contract('Pre-period', function(accounts){
     Pre - buy
   */
   it("Pre committmets Should be able to buy early", function(){
-    return ContributionDeployed.preCommit(web3.eth.accounts[5], {from: ownerAdd,value: web3.toWei(100, 'ether')})
+    return ContributionDeployed.preCommit(web3.eth.accounts[5], {from: ownerAdd,value: web3.toWei(100, 'ether'), gas:200000})
       .then(function(){
         return GUPTokenDeployed.balanceOf(web3.eth.accounts[5])
       })
@@ -101,7 +125,7 @@ contract('Pre-period', function(accounts){
       })
   });
   it("Other accounts should not be able to buy early", function(){
-    return ContributionDeployed.preCommit(web3.eth.accounts[6], {from: web3.eth.accounts[4],value: web3.toWei(100, 'ether')})
+    return ContributionDeployed.preCommit(web3.eth.accounts[6], {from: web3.eth.accounts[4],value: web3.toWei(100, 'ether'), gas:200000})
       .catch(function(){
         return GUPTokenDeployed.balanceOf(web3.eth.accounts[6])
                 .then(function(balance){
@@ -128,7 +152,7 @@ contract('Pre-period', function(accounts){
     });
   });
   it("prebuy function fails when halted", function(){
-    return ContributionDeployed.preCommit(web3.eth.accounts[5], {from: ownerAdd,value: web3.toWei(1, 'ether')})
+    return ContributionDeployed.preCommit(web3.eth.accounts[5], {from: ownerAdd,value: web3.toWei(1, 'ether'), gas:200000})
     .then(function(balance){
       assert.true(false,"mis-match");
     })
@@ -194,7 +218,7 @@ contract('Pre-period', function(accounts){
     })
   })
   it("Pre committmets Should be able to buy up to a few seconds before contribuition starts", function(){
-    return ContributionDeployed.preCommit(web3.eth.accounts[7], {from: ownerAdd,value: web3.toWei(100, 'ether')})
+    return ContributionDeployed.preCommit(web3.eth.accounts[7], {from: ownerAdd,value: web3.toWei(100, 'ether'), gas:200000})
       .then(function(){
         return GUPTokenDeployed.balanceOf(web3.eth.accounts[7])
       })
@@ -207,11 +231,11 @@ contract('Pre-period', function(accounts){
   /*
     check company's remaining CDT
   */
-  it("Company's CDT balance after pre-commitments", function(){
-    return GUPTokenDeployed.balanceOf(MATCHPOOL)
+  it("Contribuition contract's CDT balance after pre-commitments", function(){
+    return GUPTokenDeployed.balanceOf(ContributionDeployedAdd)
       .then(function(balance){
-        assert.equal(balance.toNumber(),998750000,"mis-match");
-        console.log("Company's CDT Balance ", balance.toNumber())
+        assert.equal(balance.toNumber(),498750000,"mis-match");
+        console.log("Contribuition contract's CDT Balance ", balance.toNumber())
       })
   });
 
@@ -249,17 +273,17 @@ contract('Pre-period', function(accounts){
   /*
     Token creation and assignment only by contribuition contract
   */
-  it("Only contribuition contract can create tokens", function(){
-    return GUPTokenDeployed.createToken(accounts[8],50,{from:accounts[1]})
-    .then(function(balance){
-      assert.true(false,"mis-match");
-    })
-    .catch(function(){
-      return GUPTokenDeployed.balanceOf(accounts[8]).then(function(instance){
-        assert.equal(instance.toNumber(),0,"tokens transferred")
-      })
-    })
-  })
+  // it("Only contribuition contract can create tokens", function(){
+  //   return GUPTokenDeployed.createToken(accounts[8],50,{from:accounts[1]})
+  //   .then(function(balance){
+  //     assert.true(false,"mis-match");
+  //   })
+  //   .catch(function(){
+  //     return GUPTokenDeployed.balanceOf(accounts[8]).then(function(instance){
+  //       assert.equal(instance.toNumber(),0,"tokens transferred")
+  //     })
+  //   })
+  // })
   it("Only contribuition contract can assign tokens", function(){
     return GUPTokenDeployed.assignTokensDuringContribuition(accounts[7], accounts[8], 50,{from:accounts[1]})
     .then(function(balance){
