@@ -42,85 +42,85 @@ contract('after period', function(accounts){
   it("Company's CDT balance on Initiallization", function(){
     return GUPTokenDeployed.balanceOf(MATCHPOOL)
       .then(function(balance){
-        assert.equal(balance.toNumber(),400000000 /* liquid team + vesting company + bounty = 40% */,"mis-match");
-        console.log("Company's CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),400000000 /* liquid team + vesting company + bounty = 40% */,"mis-match");
+        console.log("Company's CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("Company's vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf(MATCHPOOL)
       .then(function(balance){
-        assert.equal(balance.toNumber(),110000000 /* liquid team + bounty */,"mis-match");
-        console.log("Company's vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),110000000 /* liquid team + bounty */,"mis-match");
+        console.log("Company's vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 CDT balance on Initiallization", function(){
     return GUPTokenDeployed.balanceOf('0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778')
       .then(function(balance){
-        assert.equal(balance.toNumber(),20000000,"mis-match");
-        console.log("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),20000000,"mis-match");
+        console.log("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778')
       .then(function(balance){
-        assert.equal(balance.toNumber(),0,"mis-match");
-        console.log("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),0,"mis-match");
+        console.log("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xC09544dA6F50441c024ec150eCEDc72De558ce94 CDT balance on Initiallization", function(){
     return GUPTokenDeployed.balanceOf('0xC09544dA6F50441c024ec150eCEDc72De558ce94')
       .then(function(balance){
-        assert.equal(balance.toNumber(),20000000,"mis-match");
-        console.log("0xC09544dA6F50441c024ec150eCEDc72De558ce94 CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),20000000,"mis-match");
+        console.log("0xC09544dA6F50441c024ec150eCEDc72De558ce94 CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xC09544dA6F50441c024ec150eCEDc72De558ce94 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xC09544dA6F50441c024ec150eCEDc72De558ce94')
       .then(function(balance){
-        assert.equal(balance.toNumber(),0,"mis-match");
-        console.log("0xC09544dA6F50441c024ec150eCEDc72De558ce94 vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),0,"mis-match");
+        console.log("0xC09544dA6F50441c024ec150eCEDc72De558ce94 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xa900191B0542e27A0022a05c45c152DFa98DB026 CDT balance on Initiallization", function(){
     return GUPTokenDeployed.balanceOf('0xa900191B0542e27A0022a05c45c152DFa98DB026')
       .then(function(balance){
-        assert.equal(balance.toNumber(),20000000,"mis-match");
-        console.log("0xa900191B0542e27A0022a05c45c152DFa98DB026 CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),20000000,"mis-match");
+        console.log("0xa900191B0542e27A0022a05c45c152DFa98DB026 CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xa900191B0542e27A0022a05c45c152DFa98DB026 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xa900191B0542e27A0022a05c45c152DFa98DB026')
       .then(function(balance){
-        assert.equal(balance.toNumber(),0,"mis-match");
-        console.log("0xa900191B0542e27A0022a05c45c152DFa98DB026 vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),0,"mis-match");
+        console.log("0xa900191B0542e27A0022a05c45c152DFa98DB026 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0x05b481E52e1Ca0A21C147016C4df729764615Afb CDT balance on Initiallization", function(){
     return GUPTokenDeployed.balanceOf('0x05b481E52e1Ca0A21C147016C4df729764615Afb')
       .then(function(balance){
-        assert.equal(balance.toNumber(),20000000,"mis-match");
-        console.log("0x05b481E52e1Ca0A21C147016C4df729764615Afb CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),20000000,"mis-match");
+        console.log("0x05b481E52e1Ca0A21C147016C4df729764615Afb CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0x05b481E52e1Ca0A21C147016C4df729764615Afb vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0x05b481E52e1Ca0A21C147016C4df729764615Afb')
       .then(function(balance){
-        assert.equal(balance.toNumber(),0,"mis-match");
-        console.log("0x05b481E52e1Ca0A21C147016C4df729764615Afb vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),0,"mis-match");
+        console.log("0x05b481E52e1Ca0A21C147016C4df729764615Afb vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 CDT balance on Initiallization", function(){
     return GUPTokenDeployed.balanceOf('0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183')
       .then(function(balance){
-        assert.equal(balance.toNumber(),20000000,"mis-match");
-        console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),20000000,"mis-match");
+        console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183')
       .then(function(balance){
-        assert.equal(balance.toNumber(),0,"mis-match");
-        console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),0,"mis-match");
+        console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
 
@@ -139,43 +139,43 @@ contract('after period', function(accounts){
   it("Company's vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf(MATCHPOOL)
       .then(function(balance){
-        assert.equal(balance.toNumber(),110000000,"mis-match");
-        console.log("Company's vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),110000000,"mis-match");
+        console.log("Company's vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778')
       .then(function(balance){
-        assert.equal(balance.toNumber(),0,"mis-match");
-        console.log("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),0,"mis-match");
+        console.log("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xC09544dA6F50441c024ec150eCEDc72De558ce94 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xC09544dA6F50441c024ec150eCEDc72De558ce94')
       .then(function(balance){
-        assert.equal(balance.toNumber(),0,"mis-match");
-        console.log("0xC09544dA6F50441c024ec150eCEDc72De558ce94 vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),0,"mis-match");
+        console.log("0xC09544dA6F50441c024ec150eCEDc72De558ce94 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xa900191B0542e27A0022a05c45c152DFa98DB026 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xa900191B0542e27A0022a05c45c152DFa98DB026')
       .then(function(balance){
-        assert.equal(balance.toNumber(),0,"mis-match");
-        console.log("0xa900191B0542e27A0022a05c45c152DFa98DB026 vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),0,"mis-match");
+        console.log("0xa900191B0542e27A0022a05c45c152DFa98DB026 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0x05b481E52e1Ca0A21C147016C4df729764615Afb vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0x05b481E52e1Ca0A21C147016C4df729764615Afb')
       .then(function(balance){
-        assert.equal(balance.toNumber(),0,"mis-match");
-        console.log("0x05b481E52e1Ca0A21C147016C4df729764615Afb vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),0,"mis-match");
+        console.log("0x05b481E52e1Ca0A21C147016C4df729764615Afb vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183')
       .then(function(balance){
-        assert.equal(balance.toNumber(),0,"mis-match");
-        console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),0,"mis-match");
+        console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
 
@@ -194,43 +194,43 @@ contract('after period', function(accounts){
   it("Company's vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf(MATCHPOOL)
       .then(function(balance){
-        assert.equal(balance.toNumber(),255000009 /* weird calculation bug*/,"mis-match");
-        console.log("Company's vested CDT Balance ", balance.toNumber())
+        assert.equal(Math.floor(web3.fromWei(balance.toNumber())),255000009 /* weird calculation bug*/,"mis-match");
+        console.log("Company's vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778')
       .then(function(balance){
-        assert.equal(balance.toNumber(),10000000,"mis-match");
-        console.log("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 vested CDT Balance ", balance.toNumber())
+        assert.equal(Math.floor(web3.fromWei(balance.toNumber())),10000000,"mis-match");
+        console.log("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xC09544dA6F50441c024ec150eCEDc72De558ce94 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xC09544dA6F50441c024ec150eCEDc72De558ce94')
       .then(function(balance){
-        assert.equal(balance.toNumber(),10000000,"mis-match");
-        console.log("0xC09544dA6F50441c024ec150eCEDc72De558ce94 vested CDT Balance ", balance.toNumber())
+        assert.equal(Math.floor(web3.fromWei(balance.toNumber())),10000000,"mis-match");
+        console.log("0xC09544dA6F50441c024ec150eCEDc72De558ce94 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xa900191B0542e27A0022a05c45c152DFa98DB026 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xa900191B0542e27A0022a05c45c152DFa98DB026')
       .then(function(balance){
-        assert.equal(balance.toNumber(),10000000,"mis-match");
-        console.log("0xa900191B0542e27A0022a05c45c152DFa98DB026 vested CDT Balance ", balance.toNumber())
+        assert.equal(Math.floor(web3.fromWei(balance.toNumber())),10000000,"mis-match");
+        console.log("0xa900191B0542e27A0022a05c45c152DFa98DB026 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0x05b481E52e1Ca0A21C147016C4df729764615Afb vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0x05b481E52e1Ca0A21C147016C4df729764615Afb')
       .then(function(balance){
-        assert.equal(balance.toNumber(),10000000,"mis-match");
-        console.log("0x05b481E52e1Ca0A21C147016C4df729764615Afb vested CDT Balance ", balance.toNumber())
+        assert.equal(Math.floor(web3.fromWei(balance.toNumber())),10000000,"mis-match");
+        console.log("0x05b481E52e1Ca0A21C147016C4df729764615Afb vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183')
       .then(function(balance){
-        assert.equal(balance.toNumber(),10000000,"mis-match");
-        console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT Balance ", balance.toNumber())
+        assert.equal(Math.floor(web3.fromWei(balance.toNumber())),10000000,"mis-match");
+        console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
 
@@ -249,43 +249,43 @@ contract('after period', function(accounts){
   it("Company's vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf(MATCHPOOL)
       .then(function(balance){
-        assert.equal(balance.toNumber(),327500000,"mis-match");
-        console.log("Company's vested CDT Balance ", balance.toNumber())
+        assert.equal(Math.floor(web3.fromWei(balance.toNumber())),327500000,"mis-match");
+        console.log("Company's vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778')
       .then(function(balance){
-        assert.equal(balance.toNumber(),15000000,"mis-match");
-        console.log("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 vested CDT Balance ", balance.toNumber())
+        assert.equal(Math.floor(web3.fromWei(balance.toNumber())),15000000,"mis-match");
+        console.log("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xC09544dA6F50441c024ec150eCEDc72De558ce94 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xC09544dA6F50441c024ec150eCEDc72De558ce94')
       .then(function(balance){
-        assert.equal(balance.toNumber(),15000000,"mis-match");
-        console.log("0xC09544dA6F50441c024ec150eCEDc72De558ce94 vested CDT Balance ", balance.toNumber())
+        assert.equal(Math.floor(web3.fromWei(balance.toNumber())),15000000,"mis-match");
+        console.log("0xC09544dA6F50441c024ec150eCEDc72De558ce94 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xa900191B0542e27A0022a05c45c152DFa98DB026 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xa900191B0542e27A0022a05c45c152DFa98DB026')
       .then(function(balance){
-        assert.equal(balance.toNumber(),15000000,"mis-match");
-        console.log("0xa900191B0542e27A0022a05c45c152DFa98DB026 vested CDT Balance ", balance.toNumber())
+        assert.equal(Math.floor(web3.fromWei(balance.toNumber())),15000000,"mis-match");
+        console.log("0xa900191B0542e27A0022a05c45c152DFa98DB026 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0x05b481E52e1Ca0A21C147016C4df729764615Afb vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0x05b481E52e1Ca0A21C147016C4df729764615Afb')
       .then(function(balance){
-        assert.equal(balance.toNumber(),15000000,"mis-match");
-        console.log("0x05b481E52e1Ca0A21C147016C4df729764615Afb vested CDT Balance ", balance.toNumber())
+        assert.equal(Math.floor(web3.fromWei(balance.toNumber())),15000000,"mis-match");
+        console.log("0x05b481E52e1Ca0A21C147016C4df729764615Afb vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183')
       .then(function(balance){
-        assert.equal(balance.toNumber(),15000000,"mis-match");
-        console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT Balance ", balance.toNumber())
+        assert.equal(Math.floor(web3.fromWei(balance.toNumber())),15000000,"mis-match");
+        console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
 
@@ -304,43 +304,43 @@ contract('after period', function(accounts){
   it("Company's vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf(MATCHPOOL)
       .then(function(balance){
-        assert.equal(balance.toNumber(),400000000,"mis-match");
-        console.log("Company's vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),400000000,"mis-match");
+        console.log("Company's vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778')
       .then(function(balance){
-        assert.equal(balance.toNumber(),20000000,"mis-match");
-        console.log("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),20000000,"mis-match");
+        console.log("0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xC09544dA6F50441c024ec150eCEDc72De558ce94 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xC09544dA6F50441c024ec150eCEDc72De558ce94')
       .then(function(balance){
-        assert.equal(balance.toNumber(),20000000,"mis-match");
-        console.log("0xC09544dA6F50441c024ec150eCEDc72De558ce94 vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),20000000,"mis-match");
+        console.log("0xC09544dA6F50441c024ec150eCEDc72De558ce94 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xa900191B0542e27A0022a05c45c152DFa98DB026 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xa900191B0542e27A0022a05c45c152DFa98DB026')
       .then(function(balance){
-        assert.equal(balance.toNumber(),20000000,"mis-match");
-        console.log("0xa900191B0542e27A0022a05c45c152DFa98DB026 vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),20000000,"mis-match");
+        console.log("0xa900191B0542e27A0022a05c45c152DFa98DB026 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0x05b481E52e1Ca0A21C147016C4df729764615Afb vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0x05b481E52e1Ca0A21C147016C4df729764615Afb')
       .then(function(balance){
-        assert.equal(balance.toNumber(),20000000,"mis-match");
-        console.log("0x05b481E52e1Ca0A21C147016C4df729764615Afb vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),20000000,"mis-match");
+        console.log("0x05b481E52e1Ca0A21C147016C4df729764615Afb vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT balance on Initiallization", function(){
     return GUPTokenDeployed.vestedBalanceOf('0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183')
       .then(function(balance){
-        assert.equal(balance.toNumber(),20000000,"mis-match");
-        console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT Balance ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),20000000,"mis-match");
+        console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
 });

@@ -46,7 +46,7 @@ contract('after period', function(accounts){
         return GUPTokenDeployed.balanceOf(web3.eth.accounts[4])
       })
       .then(function(balance){
-        assert.equal(balance.toNumber(),625000,"mis-match");
+        assert.equal(web3.fromWei(balance.toNumber()),625000,"mis-match");
         console.log("Pre preCommittmets Balance ", balance.toNumber())
       })
   });
@@ -70,12 +70,12 @@ contract('after period', function(accounts){
     transferability
   */
   it("Tokens should now be transferrable", function(){
-    return GUPTokenDeployed.transfer(accounts[5],50,{from:accounts[4]})
+    return GUPTokenDeployed.transfer(accounts[5],web3.toWei(50),{from:accounts[4]})
     .then(function(){
       return GUPTokenDeployed.balanceOf(accounts[5])
     })
     .then(function(instance){
-      assert.equal(instance.toNumber(),50,"tokens transferred")
+      assert.equal(web3.fromWei(instance.toNumber()),50,"tokens transferred")
       console.log("New recipient Balance: ", instance.toNumber())
     })
   })
@@ -86,7 +86,7 @@ contract('after period', function(accounts){
     })
     .catch(function(balance){
       return GUPTokenDeployed.balanceOf(accounts[4]).then(function(instance){
-          assert.equal(instance.toNumber(),624950,"tokens transferred")
+          assert.equal(web3.fromWei(instance.toNumber()),624950,"tokens transferred")
       })
     })
   })
@@ -97,7 +97,7 @@ contract('after period', function(accounts){
     })
     .catch(function(balance){
       return GUPTokenDeployed.balanceOf(accounts[4]).then(function(instance){
-          assert.equal(instance.toNumber(),624950,"tokens transferred")
+          assert.equal(web3.fromWei(instance.toNumber()),624950,"tokens transferred")
       })
     })
   })

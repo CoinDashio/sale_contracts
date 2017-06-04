@@ -8,13 +8,11 @@ contract GUPToken is VestedToken {
 
 	//FIELDS
 	//CONSTANTS
-	// uint public constant LOCKOUT_PERIOD = 1 years; //time after end date that illiquid GUP can be transferred
+	uint public constant decimals = 18;  // 18 decimal places, the same as ETH.
 
 	//ASSIGNED IN INITIALIZATION
 	uint public endContribuitionTime; //Time in seconds no more tokens can be created
 	address public creator; //address of the account which may mint new tokens
-
-	// mapping (address => uint) public illiquidBalance; //Balance of 'Frozen funds'
 
 	//MODIFIERS
 	//Can only be called by contribution contract.

@@ -68,8 +68,8 @@ contract('stage one', function(accounts){
       .catch(function(error){
         return GUPTokenDeployed.balanceOf(web3.eth.accounts[3])
           .then(function(balance){
-            assert.equal(balance.toNumber(),0,"mis-match");
-            console.log(web3.eth.accounts[3] + " account has " + balance.toNumber() + " balance");
+            assert.equal(web3.fromWei(balance.toNumber()),0,"mis-match");
+            console.log(web3.eth.accounts[3] + " account has " + web3.fromWei(balance.toNumber()) + " balance");
          })
       })
   });
@@ -120,8 +120,8 @@ contract('stage one', function(accounts){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(100, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
         GUPTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
-          assert.equal(instance.toNumber(), 625000,"mis-match");
-          console.log("purchased GUP: ", instance.toNumber())
+          assert.equal(web3.fromWei(instance.toNumber()), 625000,"mis-match");
+          console.log("purchased GUP: ", web3.fromWei(instance.toNumber()))
           done()
         })
       }
@@ -136,8 +136,8 @@ contract('stage one', function(accounts){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(79900, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
         GUPTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
-          assert.equal(instance.toNumber(), 500000000,"mis-match");
-          console.log("purchased GUP: ", instance.toNumber())
+          assert.equal(web3.fromWei(instance.toNumber()), 500000000,"mis-match");
+          console.log("purchased GUP: ", web3.fromWei(instance.toNumber()))
           done()
         })
       }
@@ -152,8 +152,8 @@ contract('stage one', function(accounts){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[5],value: web3.toWei(1, 'ether'), gas:200000},(err,result)=>{
       if (err) {
         GUPTokenDeployed.balanceOf(web3.eth.accounts[5]).then(function(instance){
-          assert.equal(instance.toNumber(), 0,"mis-match");
-          console.log("purchased GUP: ", instance.toNumber())
+          assert.equal(web3.fromWei(instance.toNumber()), 0,"mis-match");
+          console.log("purchased GUP: ", web3.fromWei(instance.toNumber()))
           done()
         })
       }
@@ -170,8 +170,8 @@ contract('stage one', function(accounts){
   it("total CDT sold in pre committmets", function(){
     return ContributionDeployed.gupSold()
       .then(function(balance){
-        assert.equal(balance.toNumber(),500000000,"mis-match");
-        console.log("total wei received ", balance.toNumber())
+        assert.equal(web3.fromWei(balance.toNumber()),500000000,"mis-match");
+        console.log("total wei received ", web3.fromWei(balance.toNumber()))
       })
   });
 
@@ -180,8 +180,8 @@ contract('stage one', function(accounts){
   */
   it("multisig wallet contains 80000 ethers", function(){
     let balance = web3.eth.getBalance(multisigAdd)
-    assert.equal(web3.fromWei(balance.toNumber(),'ether'), 80000, "mis-match");
-    console.log("multisig wallet ended up with " + web3.fromWei(balance.toNumber(),'ether') + " ethers");
+    assert.equal(web3.fromWei(balance.toNumber()), 80000, "mis-match");
+    console.log("multisig wallet ended up with " + web3.fromWei(web3.fromWei(balance.toNumber()),'ether') + " ethers");
   });
 
   /*
@@ -195,7 +195,7 @@ contract('stage one', function(accounts){
     .catch(function(){
       return GUPTokenDeployed.balanceOf(accounts[5])
         .then(function(instance){
-          assert.equal(instance.toNumber(),0,"tokens transferred")
+          assert.equal(web3.fromWei(instance.toNumber()),0,"tokens transferred")
         })
     })
   })

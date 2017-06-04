@@ -101,7 +101,7 @@ contract('Pre-period', function(accounts){
         return GUPTokenDeployed.balanceOf(web3.eth.accounts[5])
       })
       .then(function(balance){
-        assert.equal(balance.toNumber(),625000,"mis-match");
+        assert.equal(web3.fromWei(balance.toNumber()),625000,"mis-match");
         console.log("Pre preCommittmets Balance ", balance.toNumber())
       })
   });
@@ -168,7 +168,7 @@ contract('Pre-period', function(accounts){
     })
     .catch(function(){
       return GUPTokenDeployed.balanceOf(accounts[5]).then(function(instance){
-        assert.equal(instance.toNumber(),625000,"tokens transferred")
+        assert.equal(web3.fromWei(instance.toNumber()),625000,"tokens transferred")
       })
     })
   })
@@ -179,7 +179,7 @@ contract('Pre-period', function(accounts){
     })
     .catch(function(){
       return GUPTokenDeployed.balanceOf(accounts[5]).then(function(instance){
-        assert.equal(instance.toNumber(),625000,"tokens transferred")
+        assert.equal(web3.fromWei(instance.toNumber()),625000,"tokens transferred")
       })
     })
   })
@@ -204,7 +204,7 @@ contract('Pre-period', function(accounts){
         return GUPTokenDeployed.balanceOf(web3.eth.accounts[7])
       })
       .then(function(balance){
-        assert.equal(balance.toNumber(),625000,"mis-match");
+        assert.equal(web3.fromWei(balance.toNumber()),625000,"mis-match");
         console.log("Pre preCommittmets Balance ", balance.toNumber())
       })
   });
@@ -215,7 +215,7 @@ contract('Pre-period', function(accounts){
   it("Contribuition contract's CDT balance after pre-commitments", function(){
     return GUPTokenDeployed.balanceOf(ContributionDeployedAdd)
       .then(function(balance){
-        assert.equal(balance.toNumber(),498750000,"mis-match");
+        assert.equal(web3.fromWei(balance.toNumber()),498750000,"mis-match");
         console.log("Contribuition contract's CDT Balance ", balance.toNumber())
       })
   });
@@ -237,7 +237,7 @@ contract('Pre-period', function(accounts){
   it("total CDT sold in pre committmets", function(){
     return ContributionDeployed.gupSold()
       .then(function(balance){
-        assert.equal(balance.toNumber(),1250000,"mis-match");
+        assert.equal(web3.fromWei(balance.toNumber()),1250000,"mis-match");
         console.log("total wei received ", balance.toNumber())
       })
   });
@@ -254,17 +254,6 @@ contract('Pre-period', function(accounts){
   /*
     Token creation and assignment only by contribuition contract
   */
-  // it("Only contribuition contract can create tokens", function(){
-  //   return GUPTokenDeployed.createToken(accounts[8],50,{from:accounts[1]})
-  //   .then(function(balance){
-  //     assert.true(false,"mis-match");
-  //   })
-  //   .catch(function(){
-  //     return GUPTokenDeployed.balanceOf(accounts[8]).then(function(instance){
-  //       assert.equal(instance.toNumber(),0,"tokens transferred")
-  //     })
-  //   })
-  // })
   it("Only contribuition contract can assign tokens", function(){
     return GUPTokenDeployed.assignTokensDuringContribuition(accounts[7], accounts[8], 50,{from:accounts[1]})
     .then(function(balance){
@@ -279,7 +268,7 @@ contract('Pre-period', function(accounts){
           return GUPTokenDeployed.balanceOf(accounts[7])
         })
         .then(function(balance){
-          assert.equal(balance.toNumber(),625000,"tokens transferred")
+          assert.equal(web3.fromWei(balance.toNumber()),625000,"tokens transferred")
         })
     })
   })

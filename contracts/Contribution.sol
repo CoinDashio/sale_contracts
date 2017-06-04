@@ -7,28 +7,28 @@ import 'zeppelin-solidity/contracts/SafeMath.sol';
 contract Contribution /*is SafeMath*/ {
 	using SafeMath for uint;
 
-	//FIELDS
+	uint public constant decimals = 18;  // 18 decimal places, the same as ETH.
 
 	//CONSTANTS
 	//Time limits
-	uint public constant STAGE_ONE_TIME_END = 1 hours;
-	uint public constant STAGE_TWO_TIME_END = 72 hours;
-	uint public constant STAGE_THREE_TIME_END = 2 weeks;
-	uint public constant STAGE_FOUR_TIME_END = 4 weeks;
+	uint public constant STAGE_ONE_TIME_END 	= 1 hours;
+	uint public constant STAGE_TWO_TIME_END 	= 72 hours;
+	uint public constant STAGE_THREE_TIME_END	= 2 weeks;
+	uint public constant STAGE_FOUR_TIME_END 	= 4 weeks;
 	//Prices of GUP
-	uint public constant PRICE_STAGE_ONE = 6250; // will result in 80K ether raised
-	uint public constant PRICE_STAGE_TWO = 6000;
-	uint public constant PRICE_STAGE_THREE = 5750;
-	uint public constant PRICE_STAGE_FOUR = 5000;
+	uint public constant PRICE_STAGE_ONE 	= decimalMulti(6250); // will result in 80K ether raised
+	uint public constant PRICE_STAGE_TWO 	= decimalMulti(6000);
+	uint public constant PRICE_STAGE_THREE 	= decimalMulti(5750);
+	uint public constant PRICE_STAGE_FOUR 	= decimalMulti(5000);
 
 	//GUP Token Limits
-	uint public constant CAP =        80000 ether; 
-	uint public constant MAX_SUPPLY =        1000000000; // billion CDT
-	uint public constant ALLOC_LIQUID_TEAM =  100000000; // 100M CDT = 10%
-	uint public constant ALLOC_ILLIQUID_TEAM =  100000000; // 100M CDT = 10%
-	uint public constant ALLOC_BOUNTIES =      10000000; // 10M CDT = 1%
-	uint public constant ALLOC_COMPANY =    290000000; // 290M CDT = 29%
-	uint public constant ALLOC_CROWDSALE =    500000000; // 500M CDT = 50%
+	uint public constant CAP 					= 80000 ether; 
+	uint public constant MAX_SUPPLY 			= decimalMulti(1000000000); // billion CDT
+	uint public constant ALLOC_LIQUID_TEAM 		= decimalMulti(100000000); // 100M CDT = 10%
+	uint public constant ALLOC_ILLIQUID_TEAM 	= decimalMulti(100000000); // 100M CDT = 10%
+	uint public constant ALLOC_BOUNTIES 		= decimalMulti(10000000); // 10M CDT = 1%
+	uint public constant ALLOC_COMPANY 			= decimalMulti(290000000); // 290M CDT = 29%
+	uint public constant ALLOC_CROWDSALE 		= decimalMulti(500000000); // 500M CDT = 50%
 
 	//ASSIGNED IN INITIALIZATION
 	//Start and end times
@@ -82,6 +82,11 @@ contract Contribution /*is SafeMath*/ {
 
 	// FUNCTIONS
 
+	// giving a number of CDT as input will return elevated to the decimal precision
+	function decimalMulti(uint input) private returns (uint) {
+		return input * 10 ** decimals;
+	}
+
 	//Initialization function. Deploys GUPToken contract assigns values, to all remaining fields, creates first entitlements in the GUP Token contract.
 	function Contribution(
 		address _multisig,
@@ -116,31 +121,31 @@ contract Contribution /*is SafeMath*/ {
 
 	function allocateTokensWithVestingToTeam(uint time) private {
 		gupToken.grantVestedTokens(0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778, 
-				20000000,
+				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
 				uint64(publicEndTime + (52 weeks)) // vesting of 1 year
 			); // team 1
 		gupToken.grantVestedTokens(0xC09544dA6F50441c024ec150eCEDc72De558ce94, 
-				20000000,
+				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
 				uint64(publicEndTime + (52 weeks)) // vesting of 1 year 
 			); // team 2
 		gupToken.grantVestedTokens(0xa900191B0542e27A0022a05c45c152DFa98DB026, 
-				20000000,
+				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
 				uint64(publicEndTime + (52 weeks)) // vesting of 1 year 
 			); // team 3
 		gupToken.grantVestedTokens(0x05b481E52e1Ca0A21C147016C4df729764615Afb, 
-				20000000,
+				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
 				uint64(publicEndTime + (52 weeks)) // vesting of 1 year 
 			); // team 4
 		gupToken.grantVestedTokens(0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183, 
-				20000000,
+				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
 				uint64(publicEndTime + (52 weeks)) // vesting of 1 year 
