@@ -3,7 +3,7 @@ pragma solidity ^0.4.6;
 
 /// @title Multisignature wallet - Allows multiple parties to agree on transactions before execution.
 /// @author Stefan George - <stefan.george@consensys.net>
-contract GUPMultiSigWallet {
+contract CDTMultiSigWallet {
 
     event Confirmation(address sender, bytes32 transactionHash);
     event Revocation(address sender, bytes32 transactionHash);

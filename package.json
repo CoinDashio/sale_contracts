@@ -8,5 +8,8 @@
     "test": "test",
     "migrations": "migrations"
   },
-  "license": "GPL3"
+  "license": "GPL3",
+  "dependencies": {
+    "zeppelin-solidity": "^1.0.6"
+  }
 }

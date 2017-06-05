@@ -1,8 +1,8 @@
 var Contribution = artifacts.require("./Contribution.sol");
-var GUPToken = artifacts.require("./GUPToken.sol");
+var CDTToken = artifacts.require("./CDTToken.sol");
 var send = require("./util").send;
-var guptokenadd;
-var GUPTokenDeployed;
+var CDTTokenadd;
+var CDTTokenDeployed;
 var ContributionDeployed;
 var ownerAdd;
 var multisigAdd;
@@ -20,11 +20,11 @@ contract('after period', function(accounts){
         })
         .then(function(address){
           ownerAdd = address;
-          return ContributionDeployed.gupToken()
+          return ContributionDeployed.cdtToken()
         })
         .then(function(instance){
-          guptokenadd = instance;
-          GUPTokenDeployed = GUPToken.at(guptokenadd);
+          CDTTokenadd = instance;
+          CDTTokenDeployed = CDTToken.at(CDTTokenadd);
         })
   })
   it("Should have an end time", function(){
@@ -43,7 +43,7 @@ contract('after period', function(accounts){
   it("Pre committmets Should be able to buy early", function(){
     return ContributionDeployed.preCommit(web3.eth.accounts[4], {from: ownerAdd,value: web3.toWei(100, 'ether'), gas:200000})
       .then(function(){
-        return GUPTokenDeployed.balanceOf(web3.eth.accounts[4])
+        return CDTTokenDeployed.balanceOf(web3.eth.accounts[4])
       })
       .then(function(balance){
         assert.equal(web3.fromWei(balance.toNumber()),625000,"mis-match");
@@ -70,9 +70,9 @@ contract('after period', function(accounts){
     transferability
   */
   it("Tokens should now be transferrable", function(){
-    return GUPTokenDeployed.transfer(accounts[5],web3.toWei(50),{from:accounts[4]})
+    return CDTTokenDeployed.transfer(accounts[5],web3.toWei(50),{from:accounts[4]})
     .then(function(){
-      return GUPTokenDeployed.balanceOf(accounts[5])
+      return CDTTokenDeployed.balanceOf(accounts[5])
     })
     .then(function(instance){
       assert.equal(web3.fromWei(instance.toNumber()),50,"tokens transferred")
@@ -80,23 +80,23 @@ contract('after period', function(accounts){
     })
   })
   it("Can't transfer more than account has", function(){
-    return GUPTokenDeployed.transfer(accounts[5],625000,{from:accounts[4]})
+    return CDTTokenDeployed.transfer(accounts[5],625000,{from:accounts[4]})
     .then(function(){
       assert.true(false, "mis-match");
     })
     .catch(function(balance){
-      return GUPTokenDeployed.balanceOf(accounts[4]).then(function(instance){
+      return CDTTokenDeployed.balanceOf(accounts[4]).then(function(instance){
           assert.equal(web3.fromWei(instance.toNumber()),624950,"tokens transferred")
       })
     })
   })
   it("Can't transfer negative values", function(){
-    return GUPTokenDeployed.transfer(accounts[5],-50,{from:accounts[4]})
+    return CDTTokenDeployed.transfer(accounts[5],-50,{from:accounts[4]})
     .then(function(){
       assert.true(false, "mis-match");
     })
     .catch(function(balance){
-      return GUPTokenDeployed.balanceOf(accounts[4]).then(function(instance){
+      return CDTTokenDeployed.balanceOf(accounts[4]).then(function(instance){
           assert.equal(web3.fromWei(instance.toNumber()),624950,"tokens transferred")
       })
     })
@@ -105,13 +105,13 @@ contract('after period', function(accounts){
   /*
     non contribuitable
   */
-  it("buy should throw and shouldn't create GUP", function(){
+  it("buy should throw and shouldn't create CDT", function(){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[6],value: web3.toWei(1, 'ether'), gas:200000},(err,result)=>{
       if (!err) {
         assert.fail("")
       }
       else {
-        return GUPTokenDeployed.balanceOf(accounts[6]).then(function(instance){
+        return CDTTokenDeployed.balanceOf(accounts[6]).then(function(instance){
           assert.equal(instance.toNumber(),0,"tokens transferred")
         })
       }

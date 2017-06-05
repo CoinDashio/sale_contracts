@@ -1,6 +1,6 @@
 pragma solidity ^0.4.6;
 
-import "./GUPToken.sol";
+import "./CDTToken.sol";
 // import "./SafeMath.sol";
 import 'zeppelin-solidity/contracts/SafeMath.sol';
 
@@ -15,13 +15,13 @@ contract Contribution /*is SafeMath*/ {
 	uint public constant STAGE_TWO_TIME_END 	= 72 hours;
 	uint public constant STAGE_THREE_TIME_END	= 2 weeks;
 	uint public constant STAGE_FOUR_TIME_END 	= 4 weeks;
-	//Prices of GUP
+	//Prices of CDTToken
 	uint public constant PRICE_STAGE_ONE 	= decimalMulti(6250); // will result in 80K ether raised
 	uint public constant PRICE_STAGE_TWO 	= decimalMulti(6000);
 	uint public constant PRICE_STAGE_THREE 	= decimalMulti(5750);
 	uint public constant PRICE_STAGE_FOUR 	= decimalMulti(5000);
 
-	//GUP Token Limits
+	//CDTToken Token Limits
 	uint public constant CAP 					= 80000 ether; 
 	uint public constant MAX_SUPPLY 			= decimalMulti(1000000000); // billion CDT
 	uint public constant ALLOC_LIQUID_TEAM 		= decimalMulti(100000000); // 100M CDT = 10%
@@ -33,18 +33,18 @@ contract Contribution /*is SafeMath*/ {
 	//ASSIGNED IN INITIALIZATION
 	//Start and end times
 	uint public publicStartTime; //Time in seconds public crowd fund starts.
-	uint public privateStartTime; //Time in seconds when BTCSuisse can purchase up to 125000 ETH worth of GUP;
+	uint public privateStartTime; //Time in seconds when BTCSuisse can purchase up to 125000 ETH worth of CDTToken;
 	uint public publicEndTime; //Time in seconds crowdsale ends
 	//Special Addresses
 	address public multisigAddress; //Address to which all ether flows.
 	address public matchpoolAddress; //Address to which ALLOC_BOUNTIES, ALLOC_LIQUID_TEAM, ALLOC_NEW_USERS, ALLOC_ILLIQUID_TEAM is sent to.
 	address public ownerAddress; //Address of the contract owner. Can halt the crowdsale.
 	//Contracts
-	GUPToken public gupToken; //External token contract hollding the GUP
+	CDTToken public cdtToken; //External token contract hollding the CDTToken
 	//Running totals
 	uint public ethReceived; //Total Ether raised.
-	uint public gupSold; //Total GUP created
-	// uint public btcsPortionTotal; //Total of Tokens purchased by BTC Suisse. Not to exceed BTCS_PORTION_MAX.
+	uint public cdtSold; //Total CDTToken created
+
 	//booleans
 	bool public halted; //halts the crowd sale if true.
 
@@ -87,7 +87,7 @@ contract Contribution /*is SafeMath*/ {
 		return input * 10 ** decimals;
 	}
 
-	//Initialization function. Deploys GUPToken contract assigns values, to all remaining fields, creates first entitlements in the GUP Token contract.
+	//Initialization function. Deploys CDTToken contract assigns values, to all remaining fields, creates first entitlements in the cdt Token contract.
 	function Contribution(
 		address _multisig,
 		address _matchpool,
@@ -101,17 +101,17 @@ contract Contribution /*is SafeMath*/ {
 		multisigAddress = _multisig;
 		matchpoolAddress = _matchpool;
 
-		gupToken = new GUPToken(MAX_SUPPLY, publicEndTime); // all tokens initially assigned to company's account
+		cdtToken = new CDTToken(MAX_SUPPLY, publicEndTime); // all tokens initially assigned to company's account
 
 		// team
 		allocateTokensWithVestingToTeam(publicEndTime); // total 10%
-		gupToken.assignTokensDuringContribuition(matchpoolAddress, ALLOC_LIQUID_TEAM); // = 10%
+		cdtToken.assignTokensDuringContribuition(matchpoolAddress, ALLOC_LIQUID_TEAM); // = 10%
 
 		// bounties
-		gupToken.assignTokensDuringContribuition(matchpoolAddress, ALLOC_BOUNTIES); // = 1%
+		cdtToken.assignTokensDuringContribuition(matchpoolAddress, ALLOC_BOUNTIES); // = 1%
 		
 		// company
-		gupToken.grantVestedTokens(matchpoolAddress, 
+		cdtToken.grantVestedTokens(matchpoolAddress, 
 				ALLOC_COMPANY,
 				uint64(publicEndTime),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
@@ -120,31 +120,31 @@ contract Contribution /*is SafeMath*/ {
 	}
 
 	function allocateTokensWithVestingToTeam(uint time) private {
-		gupToken.grantVestedTokens(0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778, 
+		cdtToken.grantVestedTokens(0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778, 
 				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
 				uint64(publicEndTime + (52 weeks)) // vesting of 1 year
 			); // team 1
-		gupToken.grantVestedTokens(0xC09544dA6F50441c024ec150eCEDc72De558ce94, 
+		cdtToken.grantVestedTokens(0xC09544dA6F50441c024ec150eCEDc72De558ce94, 
 				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
 				uint64(publicEndTime + (52 weeks)) // vesting of 1 year 
 			); // team 2
-		gupToken.grantVestedTokens(0xa900191B0542e27A0022a05c45c152DFa98DB026, 
+		cdtToken.grantVestedTokens(0xa900191B0542e27A0022a05c45c152DFa98DB026, 
 				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
 				uint64(publicEndTime + (52 weeks)) // vesting of 1 year 
 			); // team 3
-		gupToken.grantVestedTokens(0x05b481E52e1Ca0A21C147016C4df729764615Afb, 
+		cdtToken.grantVestedTokens(0x05b481E52e1Ca0A21C147016C4df729764615Afb, 
 				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
 				uint64(publicEndTime + (52 weeks)) // vesting of 1 year 
 			); // team 4
-		gupToken.grantVestedTokens(0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183, 
+		cdtToken.grantVestedTokens(0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183, 
 				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
@@ -159,7 +159,7 @@ contract Contribution /*is SafeMath*/ {
 		halted = _halted;
 	}
 
-	//constant function returns the current GUP price.
+	//constant function returns the current cdt price.
 	function getPriceRate()
 		constant
 		returns (uint o_rate)
@@ -174,9 +174,9 @@ contract Contribution /*is SafeMath*/ {
 	// Given the rate of a purchase and the remaining tokens in this tranche, it
 	// will throw if the sale would take it past the limit of the tranche.
 	// It executes the purchase for the appropriate amount of tokens, which
-	// involves adding it to the total, minting GUP tokens and stashing the
+	// involves adding it to the total, minting cdt tokens and stashing the
 	// ether.
-	// Returns `amount` in scope as the number of GUP tokens that it will
+	// Returns `amount` in scope as the number of cdt tokens that it will
 	// purchase.
 	function processPurchase(address _to, uint _rate)
 		internal
@@ -188,14 +188,14 @@ contract Contribution /*is SafeMath*/ {
 		if (ethReceived.add(msg.value) > CAP) throw;
 
 		if (!multisigAddress.send(msg.value)) throw;
-		if (!gupToken.assignTokensDuringContribuition(_to, o_amount)) throw;
+		if (!cdtToken.assignTokensDuringContribuition(_to, o_amount)) throw;
 
 		ethReceived = ethReceived.add(msg.value);
-		gupSold = gupSold.add(o_amount);
+		cdtSold = cdtSold.add(o_amount);
 	}
 
 	//Default function called by sending Ether to this address with no arguments.
-	//Results in creation of new GUP Tokens if transaction would not exceed hard limit of GUP Token.
+	//Results in creation of new cdt Tokens if transaction would not exceed hard limit of cdt Token.
 	function()
 		payable
 		is_crowdfund_period

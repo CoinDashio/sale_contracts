@@ -1,12 +1,12 @@
 var Contribution = artifacts.require("./Contribution.sol");
-var GUPToken = artifacts.require("./GUPToken.sol");
-var GUPMultiSigWallet = artifacts.require("./GUPMultiSigWallet.sol")
+var CDTToken = artifacts.require("./CDTToken.sol");
+var CDTMultiSigWallet = artifacts.require("./CDTMultiSigWallet.sol")
 var send = require("./util").send;
-var guptokenadd;
-var GUPTokenDeployed;
+var CDTTokenadd;
+var CDTTokenDeployed;
 var ContributionDeployed;
 var ownerAdd;
-var GUPMultiSigWallet;
+var CDTMultiSigWallet;
 var multisigAdd;
 var publicStartTime;
 
@@ -22,12 +22,12 @@ contract('stage one', function(accounts){
         })
         .then(function(address){
           ownerAdd = address;
-          return ContributionDeployed.gupToken()
+          return ContributionDeployed.cdtToken()
         })
         .then(function(instance){
-          guptokenadd = instance;
-          GUPTokenDeployed = GUPToken.at(guptokenadd);
-          return GUPMultiSigWallet.deployed()
+          CDTTokenadd = instance;
+          CDTTokenDeployed = CDTToken.at(CDTTokenadd);
+          return CDTMultiSigWallet.deployed()
         })
         .then(function(instance){
           return instance.address
@@ -66,7 +66,7 @@ contract('stage one', function(accounts){
         done()
       })
       .catch(function(error){
-        return GUPTokenDeployed.balanceOf(web3.eth.accounts[3])
+        return CDTTokenDeployed.balanceOf(web3.eth.accounts[3])
           .then(function(balance){
             assert.equal(web3.fromWei(balance.toNumber()),0,"mis-match");
             console.log(web3.eth.accounts[3] + " account has " + web3.fromWei(balance.toNumber()) + " balance");
@@ -116,12 +116,12 @@ contract('stage one', function(accounts){
   /*
     Buying
   */
-  it("buy should work and send Gup + ether", function(done){
+  it("buy should work and send CDT + ether", function(done){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(100, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
-        GUPTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
+        CDTTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
           assert.equal(web3.fromWei(instance.toNumber()), 600000,"mis-match");
-          console.log("purchased GUP: ", web3.fromWei(instance.toNumber()))
+          console.log("purchased CDT: ", web3.fromWei(instance.toNumber()))
           done()
         })
       }
@@ -135,9 +135,9 @@ contract('stage one', function(accounts){
   it("Can buy up to 80K ETH", function(done){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(79900, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
-        GUPTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
+        CDTTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
           assert.equal(web3.fromWei(instance.toNumber()), 480000000,"mis-match");
-          console.log("purchased GUP: ", web3.fromWei(instance.toNumber()))
+          console.log("purchased CDT: ", web3.fromWei(instance.toNumber()))
           done()
         })
       }
@@ -151,9 +151,9 @@ contract('stage one', function(accounts){
   it("no more than 80,000 ETH can be contribuited", function(done){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[5],value: web3.toWei(1, 'ether'), gas:200000},(err,result)=>{
       if (err) {
-        GUPTokenDeployed.balanceOf(web3.eth.accounts[5]).then(function(instance){
+        CDTTokenDeployed.balanceOf(web3.eth.accounts[5]).then(function(instance){
           assert.equal(web3.fromWei(instance.toNumber()), 0,"mis-match");
-          console.log("purchased GUP: ", web3.fromWei(instance.toNumber()))
+          console.log("purchased CDT: ", web3.fromWei(instance.toNumber()))
           done()
         })
       }
@@ -168,7 +168,7 @@ contract('stage one', function(accounts){
     total CDT sold
   */
   it("total CDT sold", function(){
-    return ContributionDeployed.gupSold()
+    return ContributionDeployed.cdtSold()
       .then(function(balance){
         assert.equal(web3.fromWei(balance.toNumber()),480000000,"mis-match");
         console.log("total wei received ", web3.fromWei(balance.toNumber()))
@@ -188,12 +188,12 @@ contract('stage one', function(accounts){
     transferability 
   */
   it("Tokens should not be transferrable", function(){
-    return GUPTokenDeployed.transfer(accounts[5],50,{from:MATCHPOOL})
+    return CDTTokenDeployed.transfer(accounts[5],50,{from:MATCHPOOL})
     .then(function(instance){
         assert.fail("mis-match");
     })
     .catch(function(){
-      return GUPTokenDeployed.balanceOf(accounts[5])
+      return CDTTokenDeployed.balanceOf(accounts[5])
         .then(function(instance){
           assert.equal(web3.fromWei(instance.toNumber()),0,"tokens transferred")
         })

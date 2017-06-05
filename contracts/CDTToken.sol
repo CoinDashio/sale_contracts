@@ -3,7 +3,7 @@ pragma solidity ^0.4.6;
 import 'zeppelin-solidity/contracts/token/VestedToken.sol';
 import 'zeppelin-solidity/contracts/SafeMath.sol';
 
-contract GUPToken is VestedToken {
+contract CDTToken is VestedToken {
 	using SafeMath for uint;
 
 	//FIELDS
@@ -36,7 +36,7 @@ contract GUPToken is VestedToken {
 	}
 
 	// Initialization contract assigns address of crowdfund contract and end time.
-	function GUPToken(uint supply, uint _endContribuitionTime) {
+	function CDTToken(uint supply, uint _endContribuitionTime) {
 		endContribuitionTime = _endContribuitionTime;
 		creator = msg.sender;
 		balances[msg.sender] = supply;
