@@ -9,7 +9,7 @@ var pubstartTime = privstarttime + 3600;
 
 module.exports = function(deployer) {
 
-   console.log("\nDeployment:\nPrivate Start Time: " + privstarttime + "\nPublic Start Time " + pubstartTime);
+  console.log("\nDeployment:\nPrivate Start Time: " + privstarttime + "\nPublic Start Time " + pubstartTime);
 
   deployer.deploy(GUPMultiSigWallet)
 	.then(function() {

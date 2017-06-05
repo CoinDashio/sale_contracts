@@ -11,5 +11,23 @@ module.exports = {
       params: params || [],
       id: new Date().getTime()
     }, callback);
+  },
+
+  sendPromise: function(method, params) {
+    return new Promise((resolve, reject) => {
+        web3.currentProvider.sendAsync({
+          jsonrpc: '2.0',
+          method,
+          params: params || [],
+          id: new Date().getTime()
+        }, function(err,result) {
+          if (err) {
+            reject(err);
+          }
+          else {
+            resolve(result);
+          }
+        });
+    });
   }
 }

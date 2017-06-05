@@ -2,6 +2,7 @@ var Contribution = artifacts.require("./Contribution.sol");
 var GUPToken = artifacts.require("./GUPToken.sol");
 var GUPMultiSigWallet = artifacts.require("./GUPMultiSigWallet.sol")
 var send = require("./util").send;
+var sendPromise = require("./util").sendPromise;
 var guptokenadd;
 var GUPTokenDeployed;
 var ContributionDeployed;
@@ -188,27 +189,25 @@ contract('Pre-period', function(accounts){
   /*
     advance time just before the contribuition starts
   */
-  it("advance time", function(){
-    return ContributionDeployed.publicStartTime().then(function(instance){
-      console.log("old time: ", web3.eth.getBlock('latest').timestamp)
-      send('evm_increaseTime',[publicStartTime - web3.eth.getBlock('latest').timestamp - 20],function(err,result){
-        send('evm_mine',[],function(){
-          console.log("new time: ", web3.eth.getBlock('latest').timestamp)
-        })
-      });
-    })
-  })
   it("Pre committmets Should be able to buy up to a few seconds before contribuition starts", function(){
-    return ContributionDeployed.preCommit(web3.eth.accounts[7], {from: ownerAdd,value: web3.toWei(100, 'ether'), gas:200000})
-      .then(function(){
-        return GUPTokenDeployed.balanceOf(web3.eth.accounts[7])
-      })
-      .then(function(balance){
-        assert.equal(web3.fromWei(balance.toNumber()),625000,"mis-match");
-        console.log("Pre preCommittmets Balance ", balance.toNumber())
-      })
-  });
-
+    console.log("old time: ", web3.eth.getBlock('latest').timestamp)
+    return sendPromise('evm_increaseTime',[publicStartTime - web3.eth.getBlock('latest').timestamp - 100])
+        .then(function(result){
+          return sendPromise('evm_mine',[])
+        })
+        .then(function(result){
+          console.log("new time: ", web3.eth.getBlock('latest').timestamp)
+          return ContributionDeployed.preCommit(web3.eth.accounts[7], {from: ownerAdd,value: web3.toWei(100, 'ether'), gas:200000})
+        })
+        .then(function(){
+          return GUPTokenDeployed.balanceOf(web3.eth.accounts[7])
+        })
+        .then(function(balance){
+          assert.equal(web3.fromWei(balance.toNumber()),625000,"mis-match");
+          console.log("Pre preCommittmets Balance ", balance.toNumber())
+        })
+  })
+  
   /*
     check company's remaining CDT
   */
