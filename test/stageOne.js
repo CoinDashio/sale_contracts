@@ -167,7 +167,7 @@ contract('stage one', function(accounts){
   /*
     total CDT sold
   */
-  it("total CDT sold in pre committmets", function(){
+  it("total CDT sold", function(){
     return ContributionDeployed.gupSold()
       .then(function(balance){
         assert.equal(web3.fromWei(balance.toNumber()),500000000,"mis-match");

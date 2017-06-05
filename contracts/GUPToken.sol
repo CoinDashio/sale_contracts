@@ -80,32 +80,21 @@ contract GUPToken is VestedToken {
     uint64 _start,
     uint64 _cliff,
     uint64 _vesting) {
-
-		/*
-			during contribuition we want all vesting to occur using the assignTokensDuringContribuition
-			function.
-			After contribuition use the default implementation
-		*/
-		// if (now > endContribuitionTime) {
-		// 	super.grantVestedTokens(_to, _value, _start, _cliff, _vesting);
-		// }
-		// else {
-			if (_cliff < _start) {
-		      throw;
-		    }
-		    if (_vesting < _start) {
-		      throw;
-		    }
-		    if (_vesting < _cliff) {
-		      throw;
-		    }
+		if (_cliff < _start) {
+	      throw;
+	    }
+	    if (_vesting < _start) {
+	      throw;
+	    }
+	    if (_vesting < _cliff) {
+	      throw;
+	    }
 
 
-		    TokenGrant memory grant = TokenGrant(msg.sender, _value, _cliff, _vesting, _start);
-		    grants[_to].push(grant);
+	    TokenGrant memory grant = TokenGrant(msg.sender, _value, _cliff, _vesting, _start);
+	    grants[_to].push(grant);
 
-		    assignTokensDuringContribuition(_to, _value);
-		// }
+	    assignTokensDuringContribuition(_to, _value);
   	}
 
 	// Transfer amount of tokens from sender account to recipient.

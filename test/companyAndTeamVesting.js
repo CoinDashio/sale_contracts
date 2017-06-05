@@ -1,6 +1,7 @@
 var Contribution = artifacts.require("./Contribution.sol");
 var GUPToken = artifacts.require("./GUPToken.sol");
 var send = require("./util").send;
+var sendPromise = require("./util").sendPromise;
 var guptokenadd;
 var GUPTokenDeployed;
 var ContributionDeployed;
@@ -13,7 +14,6 @@ const twenty_six_weeks = /*weeks*/ 26 * /*days*/ 7 * /*hours*/ 24 * /*minutes*/6
 contract('after period', function(accounts){
   const MATCHPOOL = accounts[2];
 
-  //Fetch deployed contracts
   //Fetch deployed contracts
   before("fetch deployed instances",function(){
     return Contribution.deployed()
@@ -123,21 +123,6 @@ contract('after period', function(accounts){
         console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
-
-  /*
-    revoke vesting
-  */
-  // it("Revoke vesting to 0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183", function(){
-  //   console.log(ownerAdd);
-  //   return GUPTokenDeployed.revokeTokenGrant('0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183', 0, {from: ownerAdd})
-  //     .then(function(balance){
-  //       return GUPTokenDeployed.balanceOf('0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183')
-  //     })
-  //     .then(function(balance){
-  //       assert.equal(web3.fromWei(balance.toNumber()),0,"mis-match");
-  //       console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 CDT Balance ", web3.fromWei(balance.toNumber()))
-  //     })
-  // });
 
 
   /*
@@ -310,11 +295,11 @@ contract('after period', function(accounts){
   */
   it("advance time", function(){
     console.log("old time: ", web3.eth.getBlock('latest').timestamp)
-	send('evm_increaseTime',[publicEndTime.toNumber() + (2*twenty_six_weeks) - web3.eth.getBlock('latest').timestamp ],function(err,result){
-	    send('evm_mine',[],function(){
-	      console.log("end of vesting time: ", web3.eth.getBlock('latest').timestamp)
-	    })
-	});
+  	send('evm_increaseTime',[publicEndTime.toNumber() + (2*twenty_six_weeks) - web3.eth.getBlock('latest').timestamp ],function(err,result){
+  	    send('evm_mine',[],function(){
+  	      console.log("end of vesting time: ", web3.eth.getBlock('latest').timestamp)
+  	    })
+  	});
   })
 
   it("Company's vested CDT balance on Initiallization", function(){
