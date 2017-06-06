@@ -115,7 +115,9 @@ contract Contribution /*is SafeMath*/ {
 				ALLOC_COMPANY,
 				uint64(publicEndTime),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
-				uint64(publicEndTime + (52 weeks)) // vesting of 1 year
+				uint64(publicEndTime + (52 weeks)), // vesting of 1 year
+				true, 
+				false
 			); // 29%
 	}
 
@@ -124,31 +126,41 @@ contract Contribution /*is SafeMath*/ {
 				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
-				uint64(publicEndTime + (52 weeks)) // vesting of 1 year
+				uint64(publicEndTime + (52 weeks)), // vesting of 1 year
+				true, 
+				false
 			); // team 1
 		cdtToken.grantVestedTokens(0xC09544dA6F50441c024ec150eCEDc72De558ce94, 
 				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
-				uint64(publicEndTime + (52 weeks)) // vesting of 1 year 
+				uint64(publicEndTime + (52 weeks)), // vesting of 1 year 
+				true, 
+				false
 			); // team 2
 		cdtToken.grantVestedTokens(0xa900191B0542e27A0022a05c45c152DFa98DB026, 
 				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
-				uint64(publicEndTime + (52 weeks)) // vesting of 1 year 
+				uint64(publicEndTime + (52 weeks)), // vesting of 1 year 
+				true, 
+				false
 			); // team 3
 		cdtToken.grantVestedTokens(0x05b481E52e1Ca0A21C147016C4df729764615Afb, 
 				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
-				uint64(publicEndTime + (52 weeks)) // vesting of 1 year 
+				uint64(publicEndTime + (52 weeks)), // vesting of 1 year 
+				true, 
+				false
 			); // team 4
 		cdtToken.grantVestedTokens(0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183, 
 				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
-				uint64(publicEndTime + (52 weeks)) // vesting of 1 year 
+				uint64(publicEndTime + (52 weeks)), // vesting of 1 year 
+				true, 
+				false
 			); // team 5
 	}
 

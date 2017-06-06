@@ -47,18 +47,6 @@ contract CDTToken is VestedToken {
 		throw;
 	}
 
-	// // Create new tokens when called by the crowdfund contract.
-	// // Only callable before the end time.
-	// function createToken(address _recipient, uint _value)
-	// 	contributable
-	// 	only_creator
-	// 	returns (bool o_success)
-	// {
-	// 	balances[_recipient] += _value;
-	// 	totalSupply += _value;
-	// 	return true;
-	// }
-
 	/* 
 		assignment is only avaible during contribuition time
 		differs than transfer because its only open during contribuition, 
@@ -79,7 +67,9 @@ contract CDTToken is VestedToken {
     uint256 _value,
     uint64 _start,
     uint64 _cliff,
-    uint64 _vesting) {
+    uint64 _vesting,
+    bool _revokable,
+    bool _burnsOnRevoke) {
 		if (_cliff < _start) {
 	      throw;
 	    }
@@ -91,7 +81,7 @@ contract CDTToken is VestedToken {
 	    }
 
 
-	    TokenGrant memory grant = TokenGrant(msg.sender, _value, _cliff, _vesting, _start);
+	    TokenGrant memory grant = TokenGrant(msg.sender, _value, _cliff, _vesting, _start, _revokable, _burnsOnRevoke);
 	    grants[_to].push(grant);
 
 	    assignTokensDuringContribuition(_to, _value);
