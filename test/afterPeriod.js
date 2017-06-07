@@ -117,4 +117,17 @@ contract('after period', function(accounts){
       }
     });
   })
+
+  /*
+    drain non sold CDT
+  */
+  it("empty Contribuition Pool", function(){
+    return ContributionDeployed.emptyContribuitionPool('0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c090000',{from:ownerAdd})
+    .then(function(){
+      return CDTTokenDeployed.balanceOf('0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c090000');
+    })
+    .then(function(balance){
+      assert.equal(web3.fromWei(balance.toNumber()),499375000,"mis-match")
+    })
+  })
 });

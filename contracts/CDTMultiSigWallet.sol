@@ -7,7 +7,7 @@ import 'zeppelin-solidity/contracts/MultisigWallet.sol';
 /// @author Stefan George - <stefan.george@consensys.net>
 contract CDTMultiSigWallet is MultisigWallet {
 
-    function CDTMultiSigWallet(address[] _owners, uint _required, uint _daylimit)       
+    function CDTMultiSigWallet(address[] _owners, uint _required)       
     MultisigWallet(_owners, _required, 0) { }
 
     function changeOwner(address _from, address _to) 

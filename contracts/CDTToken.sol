@@ -92,7 +92,7 @@ contract CDTToken is VestedToken {
 	function transfer(address _to, uint _value) 
 		when_transferable
 		canTransfer(msg.sender, _value) {
-	   return super.transfer(_to, _value);
+	    return super.transfer(_to, _value);
 	}
 
 	// Transfer amount of tokens from a specified address to a recipient.

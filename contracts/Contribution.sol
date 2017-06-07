@@ -51,6 +51,12 @@ contract Contribution /*is SafeMath*/ {
 	//FUNCTION MODIFIERS
 
 	//Is currently in the period after the private start time and before the public start time.
+	modifier is_post_crowdfund_period() {
+		if (now < publicEndTime) throw;
+		_;
+	}
+
+	//Is currently in the period after the private start time and before the public start time.
 	modifier is_pre_crowdfund_period() {
 		if (now >= publicStartTime || now < privateStartTime) throw;
 		_;
@@ -119,6 +125,8 @@ contract Contribution /*is SafeMath*/ {
 				true, 
 				false
 			); // 29%
+
+		// leaves 50% for crowdsale
 	}
 
 	function allocateTokensWithVestingToTeam(uint time) private {
@@ -197,7 +205,7 @@ contract Contribution /*is SafeMath*/ {
 
 		o_amount = msg.value.mul(_rate).div(1 ether);
 
-		if (ethReceived.add(msg.value) > CAP) throw;
+		if (ethReceived.add(msg.value) > CAP || cdtSold >= ALLOC_CROWDSALE) throw;
 
 		if (!multisigAddress.send(msg.value)) throw;
 		if (!cdtToken.assignTokensDuringContribuition(_to, o_amount)) throw;
@@ -226,6 +234,13 @@ contract Contribution /*is SafeMath*/ {
 	{
 		uint amount = processPurchase(_to, getPriceRate());
 		Buy(msg.sender, amount);
+	}
+
+	function emptyContribuitionPool(address _to) 
+		only_owner
+		is_post_crowdfund_period
+	{
+		cdtToken.transfer(_to, (ALLOC_CROWDSALE - cdtSold));
 	}
 
 	//failsafe drain
