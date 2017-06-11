@@ -33,7 +33,6 @@ contract Contribution /*is SafeMath*/ {
 	//ASSIGNED IN INITIALIZATION
 	//Start and end times
 	uint public publicStartTime; //Time in seconds public crowd fund starts.
-	uint public privateStartTime; //Time in seconds when BTCSuisse can purchase up to 125000 ETH worth of CDTToken;
 	uint public publicEndTime; //Time in seconds crowdsale ends
 	//Special Addresses
 	address public multisigAddress; //Address to which all ether flows.
@@ -53,12 +52,6 @@ contract Contribution /*is SafeMath*/ {
 	//Is currently in the period after the private start time and before the public start time.
 	modifier is_post_crowdfund_period() {
 		if (now < publicEndTime) throw;
-		_;
-	}
-
-	//Is currently in the period after the private start time and before the public start time.
-	modifier is_pre_crowdfund_period() {
-		if (now >= publicStartTime || now < privateStartTime) throw;
 		_;
 	}
 
@@ -97,12 +90,10 @@ contract Contribution /*is SafeMath*/ {
 	function Contribution(
 		address _multisig,
 		address _matchpool,
-		uint _publicStartTime,
-		uint _privateStartTime
+		uint _publicStartTime
 	) {
 		ownerAddress = msg.sender;
 		publicStartTime = _publicStartTime;
-		privateStartTime = _privateStartTime;
 		publicEndTime = _publicStartTime + STAGE_FOUR_TIME_END; // end of Contribution
 		multisigAddress = _multisig;
 		matchpoolAddress = _matchpool;
@@ -222,17 +213,6 @@ contract Contribution /*is SafeMath*/ {
 		is_not_halted
 	{
 		uint amount = processPurchase(msg.sender, getPriceRate());
-		Buy(msg.sender, amount);
-	}
-
-	// allow to assgin pre-commitments
-	function preCommit(address _to) 
-		only_owner
-		is_pre_crowdfund_period
-		payable
-		is_not_halted
-	{
-		uint amount = processPurchase(_to, getPriceRate());
 		Buy(msg.sender, amount);
 	}
 
