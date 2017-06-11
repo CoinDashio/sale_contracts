@@ -11,15 +11,15 @@ contract Contribution /*is SafeMath*/ {
 
 	//CONSTANTS
 	//Time limits
-	uint public constant STAGE_ONE_TIME_END 	= 1 hours;
-	uint public constant STAGE_TWO_TIME_END 	= 72 hours;
-	uint public constant STAGE_THREE_TIME_END	= 2 weeks;
+	uint public constant STAGE_ONE_TIME_END 	= 1 weeks;
+	uint public constant STAGE_TWO_TIME_END 	= 2 weeks;
+	uint public constant STAGE_THREE_TIME_END	= 3 weeks;
 	uint public constant STAGE_FOUR_TIME_END 	= 4 weeks;
 	//Prices of CDTToken
-	uint public constant PRICE_STAGE_ONE 	= decimalMulti(6250); // will result in 80K ether raised
-	uint public constant PRICE_STAGE_TWO 	= decimalMulti(6000);
-	uint public constant PRICE_STAGE_THREE 	= decimalMulti(5750);
-	uint public constant PRICE_STAGE_FOUR 	= decimalMulti(5000);
+	uint public constant PRICE_STAGE_ONE 	= decimalMulti(6250); // 30% bonus
+	uint public constant PRICE_STAGE_TWO 	= decimalMulti(6000); // 20% bonus
+	uint public constant PRICE_STAGE_THREE 	= decimalMulti(5750); // 10% bonus
+	uint public constant PRICE_STAGE_FOUR 	= decimalMulti(5000); // 0% bonus
 
 	//CDTToken Token Limits
 	uint public constant CAP 					= 80000 ether; 
@@ -36,7 +36,7 @@ contract Contribution /*is SafeMath*/ {
 	uint public publicEndTime; //Time in seconds crowdsale ends
 	//Special Addresses
 	address public multisigAddress; //Address to which all ether flows.
-	address public matchpoolAddress; //Address to which ALLOC_BOUNTIES, ALLOC_LIQUID_TEAM, ALLOC_NEW_USERS, ALLOC_ILLIQUID_TEAM is sent to.
+	address public coindashAddress; //Address to which ALLOC_BOUNTIES, ALLOC_LIQUID_TEAM, ALLOC_NEW_USERS, ALLOC_ILLIQUID_TEAM is sent to.
 	address public ownerAddress; //Address of the contract owner. Can halt the crowdsale.
 	//Contracts
 	CDTToken public cdtToken; //External token contract hollding the CDTToken
@@ -89,26 +89,26 @@ contract Contribution /*is SafeMath*/ {
 	//Initialization function. Deploys CDTToken contract assigns values, to all remaining fields, creates first entitlements in the cdt Token contract.
 	function Contribution(
 		address _multisig,
-		address _matchpool,
+		address _coindash,
 		uint _publicStartTime
 	) {
 		ownerAddress = msg.sender;
 		publicStartTime = _publicStartTime;
 		publicEndTime = _publicStartTime + STAGE_FOUR_TIME_END; // end of Contribution
 		multisigAddress = _multisig;
-		matchpoolAddress = _matchpool;
+		coindashAddress = _coindash;
 
 		cdtToken = new CDTToken(MAX_SUPPLY, publicEndTime); // all tokens initially assigned to company's account
 
 		// team
 		allocateTokensWithVestingToTeam(publicEndTime); // total 10%
-		cdtToken.assignTokensDuringContribuition(matchpoolAddress, ALLOC_LIQUID_TEAM); // = 10%
+		cdtToken.assignTokensDuringContribuition(coindashAddress, ALLOC_LIQUID_TEAM); // = 10%
 
 		// bounties
-		cdtToken.assignTokensDuringContribuition(matchpoolAddress, ALLOC_BOUNTIES); // = 1%
+		cdtToken.assignTokensDuringContribuition(coindashAddress, ALLOC_BOUNTIES); // = 1%
 		
 		// company
-		cdtToken.grantVestedTokens(matchpoolAddress, 
+		cdtToken.grantVestedTokens(coindashAddress, 
 				ALLOC_COMPANY,
 				uint64(publicEndTime),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months

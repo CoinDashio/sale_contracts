@@ -11,7 +11,7 @@ var multisigAdd;
 var publicStartTime;
 
 contract('stage one', function(accounts){
-  const MATCHPOOL = accounts[2];
+  const COINDASH = accounts[0];
 
   //Fetch deployed contracts
   before("fetch deployed instances",function(){
@@ -48,31 +48,13 @@ contract('stage one', function(accounts){
   before("advance time", function(){
     return ContributionDeployed.publicStartTime().then(function(instance){
       console.log("old time: ", web3.eth.getBlock('latest').timestamp)
-      send('evm_increaseTime',[publicStartTime - web3.eth.getBlock('latest').timestamp + 1 + (2 * 7 * 24 * 60 * 60) /* after stage 3*/],function(err,result){
+      send('evm_increaseTime',[publicStartTime - web3.eth.getBlock('latest').timestamp + 1 + (3 * 7 * 24 * 60 * 60) /* after stage 3*/],function(err,result){
         send('evm_mine',[],function(){
           console.log("new time: ", web3.eth.getBlock('latest').timestamp)
         })
       });
     })
   })
-
-  /*
-    Pre commitments
-  */
-  it("Pre committmets Should NOT be able to buy when contribuition starts", function(){
-    return ContributionDeployed.preCommit(web3.eth.accounts[3], {from: ownerAdd,value: web3.toWei(100, 'ether')})
-      .then(function(){
-        assert.true(false,"mis-match");
-        done()
-      })
-      .catch(function(error){
-        return CDTTokenDeployed.balanceOf(web3.eth.accounts[3])
-          .then(function(balance){
-            assert.equal(web3.fromWei(balance.toNumber()),0,"mis-match");
-            console.log(web3.eth.accounts[3] + " account has " + web3.fromWei(balance.toNumber()) + " balance");
-         })
-      })
-  });
 
   /*
     halting 
@@ -188,7 +170,7 @@ contract('stage one', function(accounts){
     transferability 
   */
   it("Tokens should not be transferrable", function(){
-    return CDTTokenDeployed.transfer(accounts[5],50,{from:MATCHPOOL})
+    return CDTTokenDeployed.transfer(accounts[5],50,{from:COINDASH})
     .then(function(instance){
         assert.fail("mis-match");
     })

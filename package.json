@@ -1,8 +1,8 @@
 {
-  "name": "matchpool-crowdfunding-contracts",
+  "name": "mcoindash-crowdfunding-contracts",
   "private": true,
   "version": "1.0.0",
-  "description": "Matchpool Crowdfunding smart contracts",
+  "description": "CoinDash Crowdfunding smart contracts",
   "main": "contracts",
   "directories": {
     "test": "test",

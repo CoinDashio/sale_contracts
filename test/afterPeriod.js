@@ -9,8 +9,6 @@ var multisigAdd;
 var publicEndTime;
 
 contract('after period', function(accounts){
-  const MATCHPOOL = accounts[2];
-
   //Fetch deployed contracts
   before("fetch deployed instances",function(){
     return Contribution.deployed()
@@ -40,16 +38,21 @@ contract('after period', function(accounts){
   /*
     buy tokens to use later
   */
-  it("Pre committmets Should be able to buy early", function(){
-    return ContributionDeployed.preCommit(web3.eth.accounts[4], {from: ownerAdd,value: web3.toWei(100, 'ether'), gas:200000})
-      .then(function(){
-        return CDTTokenDeployed.balanceOf(web3.eth.accounts[4])
-      })
-      .then(function(balance){
-        assert.equal(web3.fromWei(balance.toNumber()),625000,"mis-match");
-        console.log("Pre preCommittmets Balance ", balance.toNumber())
-      })
-  });
+  it("buy should work and send CDT + ether", function(done){
+    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(100, 'ether'), gas:200000},(err,result)=>{
+      if (!err && result) {
+        CDTTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
+          assert.equal(web3.fromWei(instance.toNumber()), 625000,"mis-match");
+          console.log("purchased CDT: ", web3.fromWei(instance.toNumber()))
+          done()
+        })
+      }
+      else {
+        assert.equal(1,0,err);
+        done()
+      }
+    });
+  })
 
 
   /*
