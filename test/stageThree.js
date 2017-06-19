@@ -10,6 +10,8 @@ var CDTMultiSigWallet;
 var multisigAdd;
 var publicStartTime;
 
+var one_week = 7 * 24 * 60 * 60;
+
 contract('stage one', function(accounts){
   const COINDASH = accounts[0];
 
@@ -45,15 +47,14 @@ contract('stage one', function(accounts){
     });
   });
 
-  before("advance time", function(){
-    return ContributionDeployed.publicStartTime().then(function(instance){
-      console.log("old time: ", web3.eth.getBlock('latest').timestamp)
-      send('evm_increaseTime',[publicStartTime - web3.eth.getBlock('latest').timestamp + 1 + (2 * 7 * 24 * 60 * 60) /* after stage 2*/],function(err,result){
-        send('evm_mine',[],function(){
-          console.log("new time: ", web3.eth.getBlock('latest').timestamp)
-        })
-      });
-    })
+  before("advance time to beginig of stage 3", function(done){
+    console.log("old time: ", web3.eth.getBlock('latest').timestamp)
+    send('evm_increaseTime',[publicStartTime - web3.eth.getBlock('latest').timestamp + 1 + one_week /* after stage 2*/],function(err,result){
+      send('evm_mine',[],function(){
+        console.log("new time: ", web3.eth.getBlock('latest').timestamp)
+        done()
+      })
+    });
   })
 
   /*
@@ -114,8 +115,40 @@ contract('stage one', function(accounts){
     });
   })
 
+  /*
+    advance time to just before end of stage 3
+  */
+  it("advance time to just before end of stage 3", function(done){
+    console.log("old time: ", web3.eth.getBlock('latest').timestamp)
+    send('evm_increaseTime',[ one_week - 10 /* just before end of stage 3 */],function(err,result){
+      send('evm_mine',[],function(){
+        console.log("new time: ", web3.eth.getBlock('latest').timestamp)
+        done()
+      })
+    });
+  })
+
+  /*
+    Buying
+  */
+  it("buy at end of stage 3 should work and send CDT + ether", function(done){
+    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(100, 'ether'), gas:200000},(err,result)=>{
+      if (!err && result) {
+        CDTTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
+          assert.equal(web3.fromWei(instance.toNumber()), 1150000,"mis-match");
+          console.log("purchased CDT: ", web3.fromWei(instance.toNumber()))
+          done()
+        })
+      }
+      else {
+        assert.equal(1,0,err);
+        done()
+      }
+    });
+  })
+
   it("Can buy up to 80K ETH", function(done){
-    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(79900, 'ether'), gas:200000},(err,result)=>{
+    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(79800, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
         CDTTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
           assert.equal(web3.fromWei(instance.toNumber()), 460000000,"mis-match");
