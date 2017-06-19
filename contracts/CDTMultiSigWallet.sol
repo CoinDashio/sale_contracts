@@ -13,6 +13,6 @@ contract CDTMultiSigWallet is MultisigWallet {
     function changeOwner(address _from, address _to) 
         external
     {
-    	throw // can't change owners
+    	throw; // can't change owners
     }
 }

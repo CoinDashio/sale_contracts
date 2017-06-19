@@ -104,8 +104,7 @@ contract Contribution /*is SafeMath*/ {
 		cdtToken = new CDTToken(MAX_SUPPLY, publicEndTime); // all tokens initially assigned to company's account
 
 		// team
-		allocateTokensWithVestingToTeam(publicEndTime); // total 10%
-		cdtToken.assignTokensDuringContribuition(coindashAddress, ALLOC_LIQUID_TEAM); // = 10%
+		allocateTokensWithVestingToTeam(publicEndTime); // total 20%
 
 		// bounties
 		cdtToken.assignTokensDuringContribuition(coindashAddress, ALLOC_BOUNTIES); // = 1%
@@ -124,6 +123,8 @@ contract Contribution /*is SafeMath*/ {
 	}
 
 	function allocateTokensWithVestingToTeam(uint time) private {
+		cdtToken.assignTokensDuringContribuition(coindashAddress, ALLOC_LIQUID_TEAM); // liquid = 10%
+
 		cdtToken.grantVestedTokens(0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778, 
 				decimalMulti(20000000),
 				uint64(time),
