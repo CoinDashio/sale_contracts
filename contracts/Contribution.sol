@@ -101,13 +101,18 @@ contract Contribution /*is SafeMath*/ {
 		multisigAddress = _multisig;
 		coindashAddress = _coindash;
 
-		cdtToken = new CDTToken(MAX_SUPPLY, publicEndTime); // all tokens initially assigned to company's account
+		cdtToken = new CDTToken(MAX_SUPPLY); // all tokens initially assigned to this contract
 
 		// team
+<<<<<<< HEAD
 		allocateTokensWithVestingToTeam(publicEndTime); // total 20%
+=======
+		allocateTokensWithVestingToTeam(publicEndTime); // total 10%
+		cdtToken.transfer(coindashAddress, ALLOC_LIQUID_TEAM); // = 10%
+>>>>>>> Removed time lock on transfers + tests
 
 		// bounties
-		cdtToken.assignTokensDuringContribuition(coindashAddress, ALLOC_BOUNTIES); // = 1%
+		cdtToken.transfer(coindashAddress, ALLOC_BOUNTIES); // = 1%
 		
 		// company
 		cdtToken.grantVestedTokens(coindashAddress, 
@@ -203,7 +208,7 @@ contract Contribution /*is SafeMath*/ {
 		if (ethReceived.add(msg.value) > CAP || cdtSold >= ALLOC_CROWDSALE) throw;
 
 		if (!multisigAddress.send(msg.value)) throw;
-		if (!cdtToken.assignTokensDuringContribuition(_to, o_amount)) throw;
+		cdtToken.transfer(_to, o_amount); // will throw if not completed.
 
 		ethReceived = ethReceived.add(msg.value);
 		cdtSold = cdtSold.add(o_amount);

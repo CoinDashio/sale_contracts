@@ -210,16 +210,13 @@ contract('stage one', function(accounts){
   /*
     transferability 
   */
-  it("Tokens should not be transferrable", function(){
+  it("Tokens should be transferrable", function(){
     return CDTTokenDeployed.transfer(accounts[5],50,{from:COINDASH})
     .then(function(instance){
-        assert.fail("mis-match");
+        return CDTTokenDeployed.balanceOf(accounts[5])
     })
-    .catch(function(){
-      return CDTTokenDeployed.balanceOf(accounts[5])
-        .then(function(instance){
-          assert.equal(web3.fromWei(instance.toNumber()),0,"tokens transferred")
-        })
+    .then(function(instance){
+      assert.equal(instance.toNumber(),50,"tokens transferred")
     })
   })
 
