@@ -128,12 +128,13 @@ contract('after period', function(accounts){
   /*
     advance time to a day before cliff
   */
-  it("advance time", function(){
+  it("advance time", function(done){
     console.log("old time: ", web3.eth.getBlock('latest').timestamp)
-	send('evm_increaseTime',[publicEndTime.toNumber() + (twenty_six_weeks - 2) - web3.eth.getBlock('latest').timestamp ],function(err,result){
-	    send('evm_mine',[],function(){
-	      console.log("day before cliff time: ", web3.eth.getBlock('latest').timestamp)
-	    })
+	  send('evm_increaseTime',[publicEndTime.toNumber() + (twenty_six_weeks - 2) - web3.eth.getBlock('latest').timestamp ],function(err,result){
+    send('evm_mine',[],function(){
+      console.log("day before cliff time: ", web3.eth.getBlock('latest').timestamp)
+      done()
+    })
 	});
   })
 
@@ -183,11 +184,12 @@ contract('after period', function(accounts){
   /*
     advance time to cliff
   */
-  it("advance time", function(){
+  it("advance time", function(done){
     console.log("old time: ", web3.eth.getBlock('latest').timestamp)
   	send('evm_increaseTime',[publicEndTime.toNumber() + (twenty_six_weeks) - web3.eth.getBlock('latest').timestamp ],function(err,result){
   	    send('evm_mine',[],function(){
   	      console.log("after cliff time: ", web3.eth.getBlock('latest').timestamp)
+          done()
   	    })
   	});
   })
@@ -238,11 +240,12 @@ contract('after period', function(accounts){
   /*
     advance time to mid cliff
   */
-  it("advance time", function(){
+  it("advance time", function(done){
     console.log("old time: ", web3.eth.getBlock('latest').timestamp)
 	send('evm_increaseTime',[publicEndTime.toNumber() + (twenty_six_weeks + twenty_six_weeks/2) - web3.eth.getBlock('latest').timestamp ],function(err,result){
 	    send('evm_mine',[],function(){
 	      console.log("mid cliff time: ", web3.eth.getBlock('latest').timestamp)
+        done()
 	    })
 	});
   })
@@ -293,11 +296,12 @@ contract('after period', function(accounts){
   /*
     advance time to end of vesting
   */
-  it("advance time", function(){
+  it("advance time", function(done){
     console.log("old time: ", web3.eth.getBlock('latest').timestamp)
   	send('evm_increaseTime',[publicEndTime.toNumber() + (2*twenty_six_weeks) - web3.eth.getBlock('latest').timestamp ],function(err,result){
   	    send('evm_mine',[],function(){
   	      console.log("end of vesting time: ", web3.eth.getBlock('latest').timestamp)
+          done()
   	    })
   	});
   })
