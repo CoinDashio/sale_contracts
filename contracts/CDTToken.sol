@@ -17,7 +17,9 @@ contract CDTToken is VestedToken {
 
 	// Initialization contract assigns address of crowdfund contract and end time.
 	function CDTToken(uint supply) {
+		totalSupply = supply;
 		creator = msg.sender;
+		
 		balances[msg.sender] = supply;
 	}
 
