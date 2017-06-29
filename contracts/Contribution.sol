@@ -1,4 +1,4 @@
-pragma solidity ^0.4.6;
+pragma solidity ^0.4.8;
 
 import "./CDTToken.sol";
 // import "./SafeMath.sol";
@@ -200,7 +200,7 @@ contract Contribution /*is SafeMath*/ {
 
 		o_amount = msg.value.mul(_rate).div(1 ether);
 
-		if (ethReceived.add(msg.value) > CAP || cdtSold.add(o_amount) >= ALLOC_CROWDSALE) throw;
+		if (ethReceived.add(msg.value) > CAP || cdtSold.add(o_amount) > ALLOC_CROWDSALE) throw;
 
 		if (!multisigAddress.send(msg.value)) throw;
 		cdtToken.transfer(_to, o_amount); // will throw if not completed.

@@ -1,4 +1,4 @@
-pragma solidity ^0.4.6;
+pragma solidity ^0.4.8;
 // import "./StandardToken.sol";
 import 'zeppelin-solidity/contracts/token/VestedToken.sol';
 import 'zeppelin-solidity/contracts/SafeMath.sol';
