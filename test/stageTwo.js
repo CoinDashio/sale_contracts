@@ -104,7 +104,7 @@ contract('stage two', function(accounts){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(100, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
         CDTTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
-          assert.equal(web3.fromWei(instance.toNumber()), 1150000,"mis-match");
+          assert.equal(web3.fromWei(instance.toNumber()), 1120000,"mis-match");
           console.log("purchased CDT: ", web3.fromWei(instance.toNumber()))
           done()
         })
@@ -136,7 +136,7 @@ contract('stage two', function(accounts){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(100, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
         CDTTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
-          assert.equal(web3.fromWei(instance.toNumber()), 2300000,"mis-match");
+          assert.equal(web3.fromWei(instance.toNumber()), 2240000,"mis-match");
           console.log("purchased CDT: ", web3.fromWei(instance.toNumber()))
           done()
         })
@@ -152,7 +152,7 @@ contract('stage two', function(accounts){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(39800, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
         CDTTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
-          assert.equal(web3.fromWei(instance.toNumber()), 460000000,"mis-match");
+          assert.equal(web3.fromWei(instance.toNumber()), 448000000,"mis-match");
           console.log("purchased CDT: ", web3.fromWei(instance.toNumber()))
           done()
         })
@@ -186,7 +186,7 @@ contract('stage two', function(accounts){
   it("total CDT sold", function(){
     return ContributionDeployed.cdtSold()
       .then(function(balance){
-        assert.equal(web3.fromWei(balance.toNumber()),460000000,"mis-match");
+        assert.equal(web3.fromWei(balance.toNumber()),448000000,"mis-match");
         console.log("total wei received ", web3.fromWei(balance.toNumber()))
       })
   });

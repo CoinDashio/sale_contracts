@@ -24,14 +24,15 @@ contract Contribution /*is SafeMath*/ {
 	uint public constant ALLOC_LIQUID_TEAM 		= decimalMulti(100000000); // 100M CDT = 10%
 	uint public constant ALLOC_ILLIQUID_TEAM 	= decimalMulti(100000000); // 100M CDT = 10%
 	uint public constant ALLOC_BOUNTIES 		= decimalMulti(10000000); // 10M CDT = 1%
+	uint public constant ALLOC_WINGS 			= decimalMulti(12500000); // 12.5M CDT = 1.25%
 	uint public constant ALLOC_COMPANY 			= decimalMulti(290000000); // 290M CDT = 29%
-	uint public constant ALLOC_CROWDSALE 		= decimalMulti(500000000); // 500M CDT = 50%
+	uint public constant ALLOC_CROWDSALE 		= decimalMulti(485000000); // 485M CDT = 48.5%
 
 	//Prices of CDTToken
-	uint public constant PRICE_STAGE_FOUR 	= decimalMulti(9500); // 0% bonus
-	uint public constant PRICE_STAGE_THREE 	= decimalMulti(10500); // 10% bonus
-	uint public constant PRICE_STAGE_TWO 	= decimalMulti(11500); // 20% bonus
-	uint public constant PRICE_STAGE_ONE 	= decimalMulti(12500); // 30% bonus
+	uint public constant PRICE_STAGE_FOUR 	= decimalMulti(9300); // 0% bonus
+	uint public constant PRICE_STAGE_THREE 	= decimalMulti(10200); // 10% bonus
+	uint public constant PRICE_STAGE_TWO 	= decimalMulti(11200); // 20% bonus
+	uint public constant PRICE_STAGE_ONE 	= decimalMulti(12125); // 30% bonus
 
 	//ASSIGNED IN INITIALIZATION
 	//Start and end times
@@ -108,6 +109,9 @@ contract Contribution /*is SafeMath*/ {
 
 		// bounties
 		cdtToken.transfer(coindashAddress, ALLOC_BOUNTIES); // = 1%
+
+		// wings forecast bounty
+		cdtToken.transfer(coindashAddress, ALLOC_WINGS); // = 1%
 		
 		// company
 		cdtToken.grantVestedTokens(coindashAddress, 
@@ -119,7 +123,7 @@ contract Contribution /*is SafeMath*/ {
 				false
 			); // 29%
 
-		// leaves 50% for crowdsale
+		// leaves 48.5% for crowdsale
 	}
 
 	function allocateTokensWithVestingToTeam(uint time) private {

@@ -42,14 +42,14 @@ contract('after period', function(accounts){
   it("Company's CDT balance on Initiallization", function(){
     return CDTTokenDeployed.balanceOf(COINDASH)
       .then(function(balance){
-        assert.equal(web3.fromWei(balance.toNumber()),400000000 /* liquid team + vesting company + bounty = 40% */,"mis-match");
+        assert.equal(web3.fromWei(balance.toNumber()),412500000 /* liquid team + vesting company + bounty + WINGS = 41.5% */,"mis-match");
         console.log("Company's CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
   it("Company's vested CDT balance on Initiallization", function(){
     return CDTTokenDeployed.vestedBalanceOf(COINDASH)
       .then(function(balance){
-        assert.equal(web3.fromWei(balance.toNumber()),110000000 /* liquid team + bounty */,"mis-match");
+        assert.equal(web3.fromWei(balance.toNumber()),122500000 /* liquid team + bounty + WINGS */,"mis-match");
         console.log("Company's vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
@@ -141,7 +141,7 @@ contract('after period', function(accounts){
   it("Company's vested CDT balance on Initiallization", function(){
     return CDTTokenDeployed.vestedBalanceOf(COINDASH)
       .then(function(balance){
-        assert.equal(web3.fromWei(balance.toNumber()),110000000,"mis-match");
+        assert.equal(web3.fromWei(balance.toNumber()),122500000,"mis-match");
         console.log("Company's vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
@@ -197,7 +197,7 @@ contract('after period', function(accounts){
   it("Company's vested CDT balance on Initiallization", function(){
     return CDTTokenDeployed.vestedBalanceOf(COINDASH)
       .then(function(balance){
-        assert.equal(Math.floor(web3.fromWei(balance.toNumber())),255000009 /* weird calculation bug*/,"mis-match");
+        assert.equal(Math.floor(web3.fromWei(balance.toNumber())),267500000 /* weird calculation bug*/,"mis-match");
         console.log("Company's vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
@@ -253,7 +253,7 @@ contract('after period', function(accounts){
   it("Company's vested CDT balance on Initiallization", function(){
     return CDTTokenDeployed.vestedBalanceOf(COINDASH)
       .then(function(balance){
-        assert.equal(Math.floor(web3.fromWei(balance.toNumber())),327500000,"mis-match");
+        assert.equal(Math.floor(web3.fromWei(balance.toNumber())),340000000,"mis-match");
         console.log("Company's vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
@@ -309,7 +309,7 @@ contract('after period', function(accounts){
   it("Company's vested CDT balance on Initiallization", function(){
     return CDTTokenDeployed.vestedBalanceOf(COINDASH)
       .then(function(balance){
-        assert.equal(web3.fromWei(balance.toNumber()),400000000,"mis-match");
+        assert.equal(web3.fromWei(balance.toNumber()),412500000,"mis-match");
         console.log("Company's vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });

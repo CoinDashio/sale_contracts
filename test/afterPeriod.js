@@ -42,7 +42,7 @@ contract('after period', function(accounts){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(100, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
         CDTTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
-          assert.equal(web3.fromWei(instance.toNumber()), 1250000,"mis-match");
+          assert.equal(web3.fromWei(instance.toNumber()), 1212500,"mis-match");
           console.log("purchased CDT: ", web3.fromWei(instance.toNumber()))
           done()
         })
@@ -89,7 +89,7 @@ contract('after period', function(accounts){
     })
     .catch(function(balance){
       return CDTTokenDeployed.balanceOf(accounts[4]).then(function(instance){
-          assert.equal(web3.fromWei(instance.toNumber()),1249950,"tokens transferred")
+          assert.equal(web3.fromWei(instance.toNumber()),1212450,"tokens transferred")
       })
     })
   })
@@ -100,7 +100,7 @@ contract('after period', function(accounts){
     })
     .catch(function(balance){
       return CDTTokenDeployed.balanceOf(accounts[4]).then(function(instance){
-          assert.equal(web3.fromWei(instance.toNumber()),1249950,"tokens transferred")
+          assert.equal(web3.fromWei(instance.toNumber()),1212450,"tokens transferred")
       })
     })
   })
@@ -130,7 +130,7 @@ contract('after period', function(accounts){
       return CDTTokenDeployed.balanceOf('0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c090000');
     })
     .then(function(balance){
-      assert.equal(web3.fromWei(balance.toNumber()),498750000,"mis-match")
+      assert.equal(web3.fromWei(balance.toNumber()),483787500,"mis-match")
     })
   })
 });
