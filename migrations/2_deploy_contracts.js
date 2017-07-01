@@ -3,20 +3,19 @@ var CDTMultiSigWallet = artifacts.require("./CDTMultiSigWallet.sol")
 
 var pubstartTime = web3.eth.getBlock('latest').timestamp;
 
-var coindash_company_account = web3.eth.accounts[0];
-var signers = [coindash_company_account, '0x006D7bB57f664BaCD12736672FB05FD5AB4677Ae', '0x001Babe793665324BB66d6651f7abAb41C7e685A'];
+var coindash_company_account = '0x0046c77E711Afa86ac71889BC3Ff4bCEBcb8CC7F';
+var signers = [coindash_company_account, '0x008a9943e55FfF50124A1FFAD63f2a0dd63bF6a2', '0x001Babe793665324BB66d6651f7abAb41C7e685A'];
 
 module.exports = function(deployer) {
 
   console.log("\nDeployment:\nPublic Start Time " + pubstartTime);
 
-  deployer.deploy(CDTMultiSigWallet, signers, 2, {from: coindash_company_account})
+  deployer.deploy(CDTMultiSigWallet, signers, 2)
 	.then(function() {
 	  return deployer.deploy(Contribution,
 	  	CDTMultiSigWallet.address,
 	  	coindash_company_account,
-	  	pubstartTime,
-	  	{from: coindash_company_account});
+	  	pubstartTime);
 	})  
 };
 
