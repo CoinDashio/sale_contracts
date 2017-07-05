@@ -348,4 +348,29 @@ contract('after period', function(accounts){
         console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183 vested CDT Balance ", web3.fromWei(balance.toNumber()))
       })
   });
+
+  /*
+    test transfering after vesting ends
+  */
+  it("0xc6bFce8cEad4EcC595bA227b9527AFA914dD0000 should have 0 balance", function(){
+    return CDTTokenDeployed.balanceOf('0xc6bFce8cEad4EcC595bA227b9527AFA914dD0000')
+      .then(function(balance){
+        assert.equal(web3.fromWei(balance.toNumber()),0,"mis-match");
+        console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD0000 CDT Balance ", web3.fromWei(balance.toNumber()))
+      })
+  });
+
+  it("transfer balance", function(){
+    return CDTTokenDeployed.vestedBalanceOf(COINDASH)
+      .then(function(balance){
+        return CDTTokenDeployed.transfer('0xc6bFce8cEad4EcC595bA227b9527AFA914dD0000' /* test account */,balance.toNumber(),{from:COINDASH})
+      })
+      .then(function(){
+        return CDTTokenDeployed.balanceOf('0xc6bFce8cEad4EcC595bA227b9527AFA914dD0000')
+      })
+      .then(function(balance){
+        assert.equal(web3.fromWei(balance.toNumber()),412500000,"mis-match");
+        console.log("0xc6bFce8cEad4EcC595bA227b9527AFA914dD0000 CDT Balance ", web3.fromWei(balance.toNumber()))
+      })
+  });
 });
