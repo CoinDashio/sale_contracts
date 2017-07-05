@@ -68,6 +68,15 @@ contract('stage one', function(accounts){
   /*
     halting 
   */
+  it("test halting not by owner", function(){
+    return ContributionDeployed.toggleHalt(true,{from: accounts[1]})
+      .then(function(){
+        assert.true(false, "test halting not by owner");
+      })
+      .catch(function(error){
+        assert.notEqual(error, null)
+      })
+  });
   it("is not halted", function(){
     return ContributionDeployed.halted()
       .then(function(instance){

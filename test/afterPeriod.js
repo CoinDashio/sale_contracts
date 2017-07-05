@@ -129,8 +129,8 @@ contract('after period', function(accounts){
     .then(function(){
       assert.true(false, "can't empty Contribuition Pool from non owner");
     })
-    .catch(function(balance){
-      
+    .catch(function(error){
+      assert.notEqual(error, null)
     })
   })
   it("empty Contribuition Pool", function(){
