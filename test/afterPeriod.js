@@ -124,6 +124,15 @@ contract('after period', function(accounts){
   /*
     drain non sold CDT
   */
+  it("can't empty Contribuition Pool from non owner", function(){
+    return ContributionDeployed.emptyContribuitionPool('0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c090000',{from:web3.eth.accounts[6]})
+    .then(function(){
+      assert.true(false, "can't empty Contribuition Pool from non owner");
+    })
+    .catch(function(balance){
+      
+    })
+  })
   it("empty Contribuition Pool", function(){
     return ContributionDeployed.emptyContribuitionPool('0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c090000',{from:ownerAdd})
     .then(function(){

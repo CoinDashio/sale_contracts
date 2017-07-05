@@ -226,7 +226,7 @@ contract Contribution /*is SafeMath*/ {
 		only_owner
 		is_post_crowdfund_period
 	{
-		cdtToken.transfer(_to, (ALLOC_CROWDSALE - cdtSold));
+		cdtToken.transfer(_to, (ALLOC_CROWDSALE.sub(cdtSold)));
 	}
 
 	//failsafe drain
