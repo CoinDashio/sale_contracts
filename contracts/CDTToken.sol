@@ -15,6 +15,13 @@ contract CDTToken is VestedToken {
 	//ASSIGNED IN INITIALIZATION
 	address public creator; //address of the account which may mint new tokens
 
+	//May only be called by the owner address
+	modifier only_owner() {
+		if (msg.sender != creator) throw;
+		_;
+	}
+
+
 	// Initialization contract assigns address of crowdfund contract and end time.
 	function CDTToken(uint supply) {
 		totalSupply = supply;
@@ -31,4 +38,11 @@ contract CDTToken is VestedToken {
 	function vestedBalanceOf(address _owner) constant returns (uint balance) {
 	    return transferableTokens(_owner, uint64(now));
     }
+
+        //failsafe drain
+	function drain()
+		only_owner
+	{
+		if (!creator.send(this.balance)) throw;
+	}
 }
