@@ -194,7 +194,7 @@ contract('stage one', function(accounts){
     return ContributionDeployed.cdtSold()
       .then(function(balance){
         assert.equal(web3.fromWei(balance.toNumber()),485000000,"mis-match");
-        console.log("total wei received ", web3.fromWei(balance.toNumber()))
+        console.log("total CDT sold ", web3.fromWei(balance.toNumber()))
       })
   });
 

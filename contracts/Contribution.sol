@@ -45,7 +45,7 @@ contract Contribution /*is SafeMath*/ {
 	//Contracts
 	CDTToken public cdtToken; //External token contract hollding the CDTToken
 	//Running totals
-	uint public ethReceived; //Total Ether raised.
+	uint public weiReceived; //Total wei raised.
 	uint public cdtSold; //Total CDTToken created
 
 	//booleans
@@ -204,12 +204,12 @@ contract Contribution /*is SafeMath*/ {
 
 		o_amount = msg.value.mul(_rate).div(1 ether);
 
-		if (ethReceived.add(msg.value) > CAP || cdtSold.add(o_amount) > ALLOC_CROWDSALE) throw;
+		if (weiReceived.add(msg.value) > CAP || cdtSold.add(o_amount) > ALLOC_CROWDSALE) throw;
 
 		if (!multisigAddress.send(msg.value)) throw;
 		cdtToken.transfer(_to, o_amount); // will throw if not completed.
 
-		ethReceived = ethReceived.add(msg.value);
+		weiReceived = weiReceived.add(msg.value);
 		cdtSold = cdtSold.add(o_amount);
 	}
 
