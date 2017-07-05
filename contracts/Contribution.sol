@@ -21,7 +21,7 @@ contract Contribution /*is SafeMath*/ {
 	uint public constant MAX_SUPPLY 			= decimalMulti(1000000000); // billion CDT
 	 
 	// allocations
-	uint public constant ALLOC_LIQUID_TEAM 		= decimalMulti(100000000); // 100M CDT = 10%
+	uint public constant ALLOC_LIQUID_CONTRIB	= decimalMulti(100000000); // 100M CDT = 10%
 	uint public constant ALLOC_ILLIQUID_TEAM 	= decimalMulti(100000000); // 100M CDT = 10%
 	uint public constant ALLOC_BOUNTIES 		= decimalMulti(10000000); // 10M CDT = 1%
 	uint public constant ALLOC_WINGS 			= decimalMulti(12500000); // 12.5M CDT = 1.25%
@@ -40,7 +40,7 @@ contract Contribution /*is SafeMath*/ {
 	uint public publicEndTime; //Time in seconds crowdsale ends
 	//Special Addresses
 	address public multisigAddress; //Address to which all ether flows.
-	address public coindashAddress; //Address to which ALLOC_BOUNTIES, ALLOC_LIQUID_TEAM, ALLOC_NEW_USERS, ALLOC_ILLIQUID_TEAM is sent to.
+	address public coindashAddress; //Address to which ALLOC_BOUNTIES, ALLOC_LIQUID_CONTRIB, ALLOC_NEW_USERS, ALLOC_ILLIQUID_TEAM is sent to.
 	address public ownerAddress; //Address of the contract owner. Can halt the crowdsale.
 	//Contracts
 	CDTToken public cdtToken; //External token contract hollding the CDTToken
@@ -104,6 +104,7 @@ contract Contribution /*is SafeMath*/ {
 
 		// team
 		allocateTokensWithVestingToTeam(publicEndTime); // total 20%
+		cdtToken.transfer(coindashAddress, ALLOC_LIQUID_CONTRIB); // liquid = 10%
 
 		// bounties
 		cdtToken.transfer(coindashAddress, ALLOC_BOUNTIES); // = 1%
@@ -125,8 +126,6 @@ contract Contribution /*is SafeMath*/ {
 	}
 
 	function allocateTokensWithVestingToTeam(uint time) private {
-		cdtToken.transfer(coindashAddress, ALLOC_LIQUID_TEAM); // liquid = 10%
-
 		cdtToken.grantVestedTokens(0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778, 
 				decimalMulti(20000000),
 				uint64(time),
