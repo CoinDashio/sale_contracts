@@ -78,8 +78,6 @@ contract Contribution /*is SafeMath*/ {
 	}
 
 	// EVENTS
-
-	event PreBuy(uint _amount);
 	event Buy(address indexed _recipient, uint _amount);
 
 
