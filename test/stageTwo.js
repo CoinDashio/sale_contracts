@@ -10,7 +10,7 @@ var CDTMultiSigWallet;
 var multisigAdd;
 var publicStartTime;
 
-var three_days = 3 * 24 * 60 * 60;
+var one_day = 24 * 60 * 60;
 var one_week = 7 * 24 * 60 * 60;
 
 contract('stage two', function(accounts){
@@ -50,7 +50,7 @@ contract('stage two', function(accounts){
 
   before("advance time to beginig of stage 2", function(done){
     console.log("old time: ", web3.eth.getBlock('latest').timestamp)
-    send('evm_increaseTime',[publicStartTime - web3.eth.getBlock('latest').timestamp + 1 + three_days /* after stage 1*/],function(err,result){
+    send('evm_increaseTime',[publicStartTime - web3.eth.getBlock('latest').timestamp + 1 + one_day /* after stage 1*/],function(err,result){
       send('evm_mine',[],function(){
         console.log("new time: ", web3.eth.getBlock('latest').timestamp)
         done()
@@ -121,7 +121,7 @@ contract('stage two', function(accounts){
   */
   it("advance time to just before end of stage 2", function(done){
     console.log("old time: ", web3.eth.getBlock('latest').timestamp)
-    send('evm_increaseTime',[ (one_week - three_days) - 10 /* just before end of stage 2 */],function(err,result){
+    send('evm_increaseTime',[ (one_week - one_day) - 10 /* just before end of stage 2 */],function(err,result){
       send('evm_mine',[],function(){
         console.log("new time: ", web3.eth.getBlock('latest').timestamp)
         done()

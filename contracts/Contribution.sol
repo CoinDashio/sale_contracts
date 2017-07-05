@@ -11,7 +11,7 @@ contract Contribution /*is SafeMath*/ {
 
 	//CONSTANTS
 	//Time limits
-	uint public constant STAGE_ONE_TIME_END 	= 3 days;
+	uint public constant STAGE_ONE_TIME_END 	= 1 days;
 	uint public constant STAGE_TWO_TIME_END 	= 1 weeks;
 	uint public constant STAGE_THREE_TIME_END	= 2 weeks;
 	uint public constant STAGE_FOUR_TIME_END 	= 4 weeks;

@@ -10,7 +10,7 @@ var CDTMultiSigWallet;
 var multisigAdd;
 var publicStartTime;
 
-var three_days = 3 * 24 * 60 * 60;
+var one_day = 24 * 60 * 60;
 
 contract('stage one', function(accounts){
   const COINDASH = accounts[0];
@@ -137,7 +137,7 @@ contract('stage one', function(accounts){
   */
   it("advance time to just before end of stage 1", function(done){
     console.log("old time: ", web3.eth.getBlock('latest').timestamp)
-    send('evm_increaseTime',[ three_days - 10],function(err,result){
+    send('evm_increaseTime',[ one_day - 10],function(err,result){
       send('evm_mine',[],function(){
         console.log("new time: ", web3.eth.getBlock('latest').timestamp)
         done()
