@@ -126,7 +126,7 @@ contract Contribution /*is SafeMath*/ {
 	}
 
 	function allocateTokensWithVestingToTeam(uint time) private {
-		cdtToken.grantVestedTokens(0xfd6259c709Be5Ea1a2A6eC9e89FEbfAd4c095778, 
+		cdtToken.grantVestedTokens(0x9c160d7450400b59AA3e7D1a8cc4Bf664859aB4B, 
 				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
@@ -134,7 +134,7 @@ contract Contribution /*is SafeMath*/ {
 				true, 
 				false
 			); // team 1
-		cdtToken.grantVestedTokens(0xC09544dA6F50441c024ec150eCEDc72De558ce94, 
+		cdtToken.grantVestedTokens(0x97251AA8f0a71b10E90077AebabEd0c1e2626455, 
 				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
@@ -142,7 +142,7 @@ contract Contribution /*is SafeMath*/ {
 				true, 
 				false
 			); // team 2
-		cdtToken.grantVestedTokens(0xa900191B0542e27A0022a05c45c152DFa98DB026, 
+		cdtToken.grantVestedTokens(0xBA361d8b9A6D7CE1603Cf526604ce5431ecc0E76, 
 				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
@@ -150,7 +150,7 @@ contract Contribution /*is SafeMath*/ {
 				true, 
 				false
 			); // team 3
-		cdtToken.grantVestedTokens(0x05b481E52e1Ca0A21C147016C4df729764615Afb, 
+		cdtToken.grantVestedTokens(0x0C60180e5F1dEf7Daa947F88bF840dCeF8A27f53, 
 				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
@@ -158,7 +158,7 @@ contract Contribution /*is SafeMath*/ {
 				true, 
 				false
 			); // team 4
-		cdtToken.grantVestedTokens(0xc6bFce8cEad4EcC595bA227b9527AFA914dD8183, 
+		cdtToken.grantVestedTokens(0x3f0C1028d5F55CaA11208173D8AE09d42c3ff5B0, 
 				decimalMulti(20000000),
 				uint64(time),
 				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
