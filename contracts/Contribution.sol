@@ -26,7 +26,7 @@ contract Contribution /*is SafeMath*/ {
 	uint public constant ALLOC_BOUNTIES 		= decimalMulti(10000000); // 10M CDT = 1%
 	uint public constant ALLOC_WINGS 			= decimalMulti(12500000); // 12.5M CDT = 1.25%
 	uint public constant ALLOC_COMPANY 			= decimalMulti(290000000); // 290M CDT = 29%
-	uint public constant ALLOC_CROWDSALE 		= decimalMulti(485000000); // 485M CDT = 48.5%
+	uint public constant ALLOC_CROWDSALE 		= decimalMulti(487500000); // 487.5M CDT = 48.75%
 
 	//Prices of CDTToken
 	uint public constant PRICE_STAGE_FOUR 	= decimalMulti(9300); // 0% bonus
