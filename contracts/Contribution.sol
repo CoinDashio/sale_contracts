@@ -116,8 +116,8 @@ contract Contribution /*is SafeMath*/ {
 		cdtToken.grantVestedTokens(coindashAddress, 
 				ALLOC_COMPANY,
 				uint64(publicEndTime),
-				uint64(publicEndTime + (26 weeks)), // cliff of 6 months
-				uint64(publicEndTime + (52 weeks)), // vesting of 1 year
+				uint64(publicEndTime + (52 weeks)), // cliff of 1 year
+				uint64(publicEndTime + (52 weeks)), // no vesting after cliff
 				true, 
 				false
 			); // 29%
