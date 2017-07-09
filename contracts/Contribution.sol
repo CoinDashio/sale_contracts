@@ -122,7 +122,7 @@ contract Contribution /*is SafeMath*/ {
 				false
 			); // 29%
 
-		// leaves 48.5% for crowdsale
+		// leaves 48.75% for crowdsale
 	}
 
 	function allocateTokensWithVestingToTeam(uint time) private {

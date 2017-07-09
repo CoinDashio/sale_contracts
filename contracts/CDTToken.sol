@@ -28,6 +28,8 @@ contract CDTToken is VestedToken {
 		creator = msg.sender;
 		
 		balances[msg.sender] = supply;
+
+		MAX_GRANTS_PER_ADDRESS = 2;
 	}
 
 	// Fallback function throws when called.
