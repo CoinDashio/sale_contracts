@@ -3,8 +3,8 @@ var CDTMultiSigWallet = artifacts.require("./CDTMultiSigWallet.sol")
 
 var pubstartTime = web3.eth.getBlock('latest').timestamp;
 
-var coindash_company_account = '0x0046c77E711Afa86ac71889BC3Ff4bCEBcb8CC7F';
-var signers = [coindash_company_account, '0x008a9943e55FfF50124A1FFAD63f2a0dd63bF6a2', '0x001Babe793665324BB66d6651f7abAb41C7e685A'];
+var coindash_company_account = '0xA869b2674914Ec42b66daFE65acaC797CD241CBA';
+var signers = ['0xA869b2674914Ec42b66daFE65acaC797CD241CBA', '0x2A33727f6905C4d267A1Ac4aa08a95712e6caca1', '0x517Ddb348dD59DAaef1533b693A38eD8631817a7'];
 
 module.exports = function(deployer) {
 
