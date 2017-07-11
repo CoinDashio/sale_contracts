@@ -36,3 +36,9 @@ KNOWN ISSUES: Truffle tests will sometimes fail whole blocks of tests as testrpc
 ## Acknowledgements
 
 These token contracts have been influenced by the work of FirstBlood, MelonPort and Golem.
+
+First Audit
+- https://gist.github.com/yaronvel/ab0c9cb2df6fd781dd666d08ff1986a9
+
+Second Audit (preliminary report)
+- https://drive.google.com/file/d/0B8fPuQ2prKN-bmtHb2F0b1VnVE0/view?usp=sharing
