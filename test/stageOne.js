@@ -120,7 +120,7 @@ contract('stage one', function(accounts){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(100, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
         CDTTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
-          assert.equal(web3.fromWei(instance.toNumber()), 1212500,"mis-match");
+          assert.equal(web3.fromWei(instance.toNumber()), 1218700,"mis-match");
           console.log("purchased CDT: ", web3.fromWei(instance.toNumber()))
           done()
         })
@@ -152,7 +152,7 @@ contract('stage one', function(accounts){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(100, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
         CDTTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
-          assert.equal(web3.fromWei(instance.toNumber()), 2425000,"mis-match");
+          assert.equal(web3.fromWei(instance.toNumber()), 2437400,"mis-match");
           console.log("purchased CDT: ", web3.fromWei(instance.toNumber()))
           done()
         })
@@ -165,10 +165,10 @@ contract('stage one', function(accounts){
   })
 
   it("Can buy up to 40K ETH", function(done){
-    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(39800, 'ether'), gas:200000},(err,result)=>{
+    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(39801, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
         CDTTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
-          assert.equal(web3.fromWei(instance.toNumber()), 485000000,"mis-match");
+          assert.equal(web3.fromWei(instance.toNumber()), 487492187 /* will be updated by the new CAP */,"mis-match");
           console.log("purchased CDT: ", web3.fromWei(instance.toNumber()))
           done()
         })
@@ -202,7 +202,7 @@ contract('stage one', function(accounts){
   it("total CDT sold", function(){
     return ContributionDeployed.cdtSold()
       .then(function(balance){
-        assert.equal(web3.fromWei(balance.toNumber()),485000000,"mis-match");
+        assert.equal(web3.fromWei(balance.toNumber()),487492187 /* will be updated by the new CAP */,"mis-match");
         console.log("total CDT sold ", web3.fromWei(balance.toNumber()))
       })
   });
@@ -212,7 +212,7 @@ contract('stage one', function(accounts){
   */
   it("multisig wallet contains 40,000 ethers", function(){
     let balance = web3.fromWei(web3.eth.getBalance(multisigAdd).toNumber())
-    assert.equal(balance, 40000, "mis-match");
+    assert.equal(balance, 40001 /* will be updated by the new CAP */, "mis-match");
     console.log("multisig wallet ended up with " + balance + " ethers");
   });
 
