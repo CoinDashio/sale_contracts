@@ -17,7 +17,7 @@ contract Contribution /*is SafeMath*/ {
 	uint public constant STAGE_FOUR_TIME_END 	= 4 weeks;
 
 	//CDTToken Token Limits
-	uint public constant CAP 					= 40001 ether; // TODO, CAP and prices will be updated
+	uint public constant CAP 					= 80000 ether;
 	uint public constant MAX_SUPPLY 			= decimalMulti(1000000000); // billion CDT
 	 
 	// allocations
@@ -29,10 +29,10 @@ contract Contribution /*is SafeMath*/ {
 	uint public constant ALLOC_CROWDSALE 		= decimalMulti(487500000); // 487.5M CDT = 48.75%
 
 	//Prices of CDTToken
-	uint public constant PRICE_STAGE_FOUR 	= decimalMulti(9300); // 0% bonus
-	uint public constant PRICE_STAGE_THREE 	= decimalMulti(10200); // 10% bonus
-	uint public constant PRICE_STAGE_TWO 	= decimalMulti(11200); // 20% bonus
-	uint public constant PRICE_STAGE_ONE 	= decimalMulti(12187); // 30% bonus
+	uint public constant PRICE_STAGE_FOUR 	= decimalMulti(4687); // 0% bonus
+	uint public constant PRICE_STAGE_THREE 	= decimalMulti(5155); // 10% bonus
+	uint public constant PRICE_STAGE_TWO 	= decimalMulti(5624); // 20% bonus
+	uint public constant PRICE_STAGE_ONE 	= decimalMulti(6093); // 30% bonus
 
 	//ASSIGNED IN INITIALIZATION
 	//Start and end times

@@ -104,7 +104,7 @@ contract('stage two', function(accounts){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(100, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
         CDTTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
-          assert.equal(web3.fromWei(instance.toNumber()), 1120000,"mis-match");
+          assert.equal(web3.fromWei(instance.toNumber()), 562400,"mis-match");
           console.log("purchased CDT: ", web3.fromWei(instance.toNumber()))
           done()
         })
@@ -136,7 +136,7 @@ contract('stage two', function(accounts){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(100, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
         CDTTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
-          assert.equal(web3.fromWei(instance.toNumber()), 2240000,"mis-match");
+          assert.equal(web3.fromWei(instance.toNumber()), 1124800,"mis-match");
           console.log("purchased CDT: ", web3.fromWei(instance.toNumber()))
           done()
         })
@@ -148,11 +148,11 @@ contract('stage two', function(accounts){
     });
   })
 
-  it("Can buy up to 40K ETH", function(done){
-    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(39800, 'ether'), gas:200000},(err,result)=>{
+  it("Can buy up to 80K ETH", function(done){
+    web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[4],value: web3.toWei(79800, 'ether'), gas:200000},(err,result)=>{
       if (!err && result) {
         CDTTokenDeployed.balanceOf(web3.eth.accounts[4]).then(function(instance){
-          assert.equal(web3.fromWei(instance.toNumber()), 448000000,"mis-match");
+          assert.equal(web3.fromWei(instance.toNumber()), 449920000,"mis-match");
           console.log("purchased CDT: ", web3.fromWei(instance.toNumber()))
           done()
         })
@@ -164,7 +164,7 @@ contract('stage two', function(accounts){
     });
   })
 
-  it("no more than 40,000 ETH can be contribuited", function(done){
+  it("no more than 80,000 ETH can be contribuited", function(done){
     web3.eth.sendTransaction({to: ContributionDeployed.address, from: web3.eth.accounts[5],value: web3.toWei(1, 'ether'), gas:200000},(err,result)=>{
       if (err) {
         CDTTokenDeployed.balanceOf(web3.eth.accounts[5]).then(function(instance){
@@ -186,7 +186,7 @@ contract('stage two', function(accounts){
   it("total CDT sold", function(){
     return ContributionDeployed.cdtSold()
       .then(function(balance){
-        assert.equal(web3.fromWei(balance.toNumber()),448000000,"mis-match");
+        assert.equal(web3.fromWei(balance.toNumber()),449920000,"mis-match");
         console.log("total CDT sold ", web3.fromWei(balance.toNumber()))
       })
   });
@@ -194,9 +194,9 @@ contract('stage two', function(accounts){
   /*
     check multisig wallet balance
   */
-  it("multisig wallet contains 40,000 ethers", function(){
+  it("multisig wallet contains 80,000 ethers", function(){
     let balance = web3.eth.getBalance(multisigAdd)
-    assert.equal(web3.fromWei(balance.toNumber()), 40000, "mis-match");
+    assert.equal(web3.fromWei(balance.toNumber()), 80000, "mis-match");
     console.log("multisig wallet ended up with " + web3.fromWei(web3.fromWei(balance.toNumber()),'ether') + " ethers");
   });
 
