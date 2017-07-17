@@ -110,7 +110,7 @@ contract Contribution /*is SafeMath*/ {
 		cdtToken.transfer(coindashAddress, ALLOC_BOUNTIES); // = 1%
 
 		// wings forecast bounty
-		cdtToken.transfer(coindashAddress, ALLOC_WINGS); // = 1%
+		cdtToken.transfer(coindashAddress, ALLOC_WINGS); // = 1.25%
 		
 		// company
 		cdtToken.grantVestedTokens(coindashAddress, 
